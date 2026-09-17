@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Smart — Coumarins &amp; Chromones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e1912;
+    --bg-2:#122019;
+    --panel:#152520;
+    --panel-2:#1b2e26;
+    --paper:#f4eeda;
+    --paper-2:#ece3c8;
+    --ink:#251f14;
+    --ink-soft:#4a4432;
+    --text-soft:#cad6cb;
+    --text-faint:#8ea394;
+    --line:rgba(220,235,225,0.10);
+    --glow-blue:#69cdff;
+    --glow-blue-dim:#2f5a70;
+    --glow-green:#c9e457;
+    --glow-green-dim:#525c26;
+    --amber:#e0a458;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1100px 600px at 85% -10%, rgba(105,205,255,0.07), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(201,228,87,0.06), transparent 60%),
+      var(--bg);
+    color:var(--text-soft);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  ::selection{ background:var(--glow-blue); color:#0e1912; }
+
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    color:#f4f1e6;
+    margin:0;
+    letter-spacing:0.2px;
+  }
+
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+
+  /* ---------- Header ---------- */
+  header.top{
+    padding:34px clamp(18px,4vw,56px) 24px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .brand{ display:flex; align-items:center; gap:18px; }
+  .brand svg{ width:52px; height:52px; flex:none; }
+  .brand-text h1{ font-size:clamp(28px,4vw,40px); font-weight:600; }
+  .brand-text p{
+    margin:6px 0 0; color:var(--text-faint); font-size:14.5px; font-style:italic;
+    font-family:'Fraunces',serif; font-weight:400;
+  }
+  .headline-right{ text-align:right; color:var(--text-faint); font-size:12.5px; line-height:1.6; }
+  .headline-right b{ color:var(--glow-blue); font-weight:600; }
+
+  @keyframes pulse{
+    0%,100%{ filter:drop-shadow(0 0 2px rgba(105,205,255,.55)); }
+    50%{ filter:drop-shadow(0 0 9px rgba(105,205,255,.9)); }
+  }
+  .ring-a{ animation:pulse 4.5s ease-in-out infinite; }
+
+  /* ---------- Layout ---------- */
+  .shell{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    gap:0;
+    max-width:1360px;
+    margin:0 auto;
+  }
+  nav.rail{
+    padding:28px 14px;
+    border-right:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    position:sticky;
+    top:0;
+    align-self:start;
+    height:calc(100vh);
+    overflow:auto;
+  }
+  .tab{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px 14px;
+    border:1px solid transparent;
+    border-radius:var(--radius);
+    background:transparent;
+    color:var(--text-faint);
+    cursor:pointer;
+    text-align:left;
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    font-weight:500;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .tab .num{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); width:16px; }
+  .tab:hover{ background:var(--panel); color:var(--text-soft); }
+  .tab.active{
+    background:var(--panel-2);
+    color:#f4f1e6;
+    border-color:var(--line);
+    box-shadow: inset 3px 0 0 var(--glow-blue);
+  }
+  .tab.active .num{ color:var(--glow-blue); }
+  .rail-foot{
+    margin-top:auto;
+    padding:14px 10px 4px;
+    font-size:11px;
+    color:var(--text-faint);
+    border-top:1px solid var(--line);
+  }
+
+  main{ padding:32px clamp(16px,3.4vw,44px) 80px; min-width:0; }
+  section.view{ display:none; }
+  section.view.active{ display:block; animation:rise .35s ease; }
+  @keyframes rise{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .section-head{ margin-bottom:22px; }
+  .eyebrow{ color:var(--text-faint); font-size:12.5px; margin:0 0 6px; }
+  .section-head h2{ font-size:clamp(22px,3vw,30px); font-weight:600; }
+  .section-head .sub{ color:var(--text-faint); font-size:14px; max-width:640px; margin-top:8px; line-height:1.55; }
+
+  /* ---------- Cards (Overview) ---------- */
+  .grid-cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 18px 16px;
+  }
+  .card h3{ font-size:16px; font-weight:600; margin-bottom:8px; color:#f0ecdb;}
+  .card p, .card li{ font-size:13.6px; line-height:1.55; color:var(--text-soft); }
+  .card ul{ margin:6px 0 0; padding-left:18px; }
+  .tag-row{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px;}
+  .chip{
+    font-size:10.5px; font-family:'IBM Plex Mono',monospace; padding:3px 8px;
+    border-radius:999px; border:1px solid var(--line); color:var(--text-faint);
+  }
+  .chip.blue{ border-color:var(--glow-blue-dim); color:var(--glow-blue); }
+  .chip.green{ border-color:var(--glow-green-dim); color:var(--glow-green); }
+
+  /* ---------- Diagrams ---------- */
+  .diagram-block{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    margin-bottom:20px;
+  }
+  .diagram-block h3{ font-size:17px; font-weight:600; margin-bottom:4px; }
+  .diagram-block .hint{ color:var(--text-faint); font-size:12.5px; margin-bottom:14px; }
+  .flex-diagram{ display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start; }
+  .ring-svg-wrap{ flex:none; }
+  .caption-box{
+    flex:1 1 260px; min-width:220px;
+    background:var(--bg-2); border:1px dashed var(--line); border-radius:var(--radius);
+    padding:14px 16px; font-size:13.5px; color:var(--text-soft); min-height:96px;
+  }
+  .caption-box b{ color:var(--glow-blue); }
+  .pos-dot{ cursor:pointer; }
+  .pos-dot circle{ transition:r .12s ease; }
+  .pos-dot:hover circle{ r:9; }
+  .pos-label{ font-size:10px; fill:#cad6cb; font-family:'IBM Plex Mono',monospace; pointer-events:none;}
+
+  .tree{ display:flex; gap:18px; flex-wrap:wrap; }
+  .tree-col{ flex:1 1 260px; }
+  details.branch{
+    background:var(--bg-2); border:1px solid var(--line); border-radius:var(--radius);
+    margin-bottom:8px; padding:0;
+  }
+  details.branch > summary{
+    list-style:none; cursor:pointer; padding:11px 14px; font-weight:600; color:#eee8d4;
+    font-size:14px; display:flex; justify-content:space-between; align-items:center;
+  }
+  details.branch > summary::-webkit-details-marker{ display:none; }
+  details.branch > summary::after{ content:'+'; color:var(--glow-blue); font-family:'IBM Plex Mono',monospace; }
+  details.branch[open] > summary::after{ content:'–'; }
+  details.branch .branch-body{ padding:0 14px 14px; font-size:13px; color:var(--text-soft); line-height:1.6; }
+  details.branch .branch-body ul{ margin:4px 0; padding-left:18px; }
+
+  .flow{ display:flex; gap:10px; overflow-x:auto; padding-bottom:8px; }
+  .flow-step{
+    flex:none; width:150px; background:var(--bg-2); border:1px solid var(--line);
+    border-radius:var(--radius); padding:12px; cursor:pointer; font-size:12.5px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .flow-step:hover, .flow-step.sel{ border-color:var(--glow-green); background:var(--panel-2); }
+  .flow-step b{ display:block; color:#f0ecdb; font-size:13px; margin-bottom:3px; }
+  .flow-arrow{ align-self:center; color:var(--text-faint); flex:none; }
+
+  table.filter-table{ width:100%; border-collapse:collapse; font-size:13.3px; }
+  table.filter-table th, table.filter-table td{
+    text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top;
+  }
+  table.filter-table th{ color:var(--text-faint); font-weight:600; font-size:11.5px; text-transform:none; }
+  tr.row-hidden{ display:none; }
+  .filter-chips{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .filter-chip{
+    padding:6px 13px; border-radius:999px; border:1px solid var(--line); background:transparent;
+    color:var(--text-faint); font-size:12.5px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  .filter-chip.active{ color:#0e1912; background:var(--glow-blue); border-color:var(--glow-blue); font-weight:600; }
+  .level-chip{
+    padding:6px 13px; border-radius:999px; border:1px solid var(--line); background:transparent;
+    color:var(--text-faint); font-size:12.5px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  .level-chip.active{ color:#0e1912; background:var(--glow-green); border-color:var(--glow-green); font-weight:600; }
+
+  .uv-stage{
+    background:#050a07; border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px; display:flex; gap:20px; flex-wrap:wrap; align-items:center;
+  }
+  .uv-lamp-btn{
+    padding:10px 16px; border-radius:999px; border:1px solid var(--glow-blue-dim);
+    background:transparent; color:var(--glow-blue); cursor:pointer; font-size:13px; font-weight:600;
+  }
+  .uv-lamp-btn.on{ background:var(--glow-blue); color:#04141c; }
+  .plate{ display:flex; gap:26px; flex-wrap:wrap; }
+  .lane{ text-align:center; font-size:11px; color:var(--text-faint); }
+  .spot{
+    width:26px; height:26px; border-radius:50%; margin:0 auto 8px; cursor:pointer;
+    background:#333; transition:background .25s ease, box-shadow .25s ease;
+    border:1px solid rgba(255,255,255,.15);
+  }
+  .spot.c-blue.lit{ background:var(--glow-blue); box-shadow:0 0 14px 4px rgba(105,205,255,.65); }
+  .spot.c-green.lit{ background:var(--glow-green); box-shadow:0 0 14px 4px rgba(201,228,87,.6); }
+  .spot-line{ width:2px; height:60px; background:#26362c; margin:0 auto; }
+
+  /* ---------- Topic map ---------- */
+  .map-wrap{ display:grid; grid-template-columns:minmax(260px,340px) 1fr; gap:22px; }
+  .hex-grid{ display:flex; flex-wrap:wrap; gap:10px; }
+  .hex{
+    width:150px; height:130px;
+    clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background:var(--panel);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    padding:14px; cursor:pointer; font-size:12.5px; font-weight:600; color:var(--text-soft);
+    transition:background .15s ease, color .15s ease;
+  }
+  .hex:hover{ background:var(--panel-2); }
+  .hex.sel{ background:var(--glow-blue-dim); color:#eaf7ff; }
+  .reading-pane{
+    background:var(--paper); color:var(--ink); border-radius:var(--radius);
+    padding:26px 28px; min-height:360px; position:sticky; top:20px; align-self:start;
+  }
+  .reading-pane h3{ color:var(--ink); font-size:20px; margin-bottom:10px; }
+  .reading-pane p, .reading-pane li{ font-size:14.5px; line-height:1.65; color:var(--ink-soft); }
+  .reading-pane ul{ padding-left:20px; }
+  .reading-pane .placeholder{ color:#8b8264; font-style:italic; }
+
+  /* ---------- Flashcards ---------- */
+  .fc-toolbar{ display:flex; gap:10px; align-items:center; margin-bottom:18px; flex-wrap:wrap; }
+  .btn{
+    padding:9px 16px; border-radius:999px; border:1px solid var(--line); background:var(--panel);
+    color:var(--text-soft); cursor:pointer; font-size:13px; font-family:'Inter',sans-serif; font-weight:600;
+  }
+  .btn.primary{ background:var(--glow-blue); border-color:var(--glow-blue); color:#04141c; }
+  .fc-progress{ color:var(--text-faint); font-size:12.5px; margin-left:auto; }
+  .fc-stage{ display:flex; justify-content:center; padding:10px 0 26px; }
+  .flip-card{
+    width:min(560px,100%); height:280px; perspective:1400px; cursor:pointer;
+  }
+  .flip-inner{
+    position:relative; width:100%; height:100%; transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    transform-style:preserve-3d;
+  }
+  .flip-card.flipped .flip-inner{ transform:rotateY(180deg); }
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:6px;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    padding:34px; font-size:17px; line-height:1.5;
+  }
+  .face.front{ background:var(--panel-2); border:1px solid var(--line); color:#f4f1e6; font-family:'Fraunces',serif; font-weight:500; }
+  .face.back{ background:var(--paper); color:var(--ink); transform:rotateY(180deg); font-family:'Inter',sans-serif; font-size:15.5px;}
+  .face .cue{ position:absolute; bottom:14px; font-size:11px; color:var(--text-faint); font-family:'Inter',sans-serif;}
+  .face.back .cue{ color:#8b8264; }
+  .fc-grid-index{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; max-width:640px; margin:0 auto; }
+  .fc-dot{ width:9px; height:9px; border-radius:50%; background:var(--line); cursor:pointer; }
+  .fc-dot.cur{ background:var(--glow-blue); }
+
+  /* ---------- Quiz ---------- */
+  .quiz-wrap{ max-width:680px; }
+  .quiz-progress{ display:flex; justify-content:space-between; font-size:12.5px; color:var(--text-faint); margin-bottom:10px; }
+  .quiz-bar{ height:4px; background:var(--line); border-radius:2px; margin-bottom:24px; overflow:hidden; }
+  .quiz-bar-fill{ height:100%; background:var(--glow-green); width:0%; transition:width .3s ease; }
+  .q-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:26px; }
+  .q-card h3{ font-size:18px; font-weight:600; margin-bottom:18px; line-height:1.5; }
+  .opt{
+    display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:10px;
+    border:1px solid var(--line); border-radius:var(--radius); background:var(--bg-2);
+    color:var(--text-soft); font-size:14px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  .opt:hover{ border-color:var(--glow-blue-dim); }
+  .opt.correct{ border-color:var(--glow-green); background:rgba(201,228,87,0.12); color:#eaf5c9; }
+  .opt.wrong{ border-color:#d8687a; background:rgba(216,104,122,0.12); color:#f6d3da; }
+  .opt[disabled]{ cursor:default; }
+  .q-actions{ display:flex; justify-content:space-between; margin-top:20px; align-items:center; }
+  .quiz-score{ font-size:13px; color:var(--text-faint); }
+  .quiz-done{ text-align:center; padding:50px 20px; }
+  .quiz-done .big{ font-family:'Fraunces',serif; font-size:44px; color:var(--glow-green); margin-bottom:6px; }
+
+  footer.site-foot{
+    border-top:1px solid var(--line); padding:22px clamp(16px,3.4vw,44px);
+    color:var(--text-faint); font-size:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width:880px){
+    .shell{ grid-template-columns:1fr; }
+    nav.rail{ position:static; height:auto; flex-direction:row; overflow-x:auto; border-right:none; border-bottom:1px solid var(--line); }
+    .rail-foot{ display:none; }
+    .map-wrap{ grid-template-columns:1fr; }
+    .reading-pane{ position:static; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ring-a{ animation:none; }
+    section.view.active{ animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 60 60" class="ring-a" fill="none">
+      <circle cx="30" cy="30" r="27" stroke="#2c463a" stroke-width="1.5"/>
+      <path d="M18 40 L18 20 L30 12 L42 20 L42 32 L30 40 Z" stroke="#69cdff" stroke-width="1.6"/>
+      <circle cx="42" cy="32" r="2.6" fill="#69cdff"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Study Smart</h1>
+      <p>Coumarins and chromones, laid out for revision.</p>
+    </div>
+  </div>
+  <div class="headline-right">
+    Pharmacognosy field guide<br>
+    <b>Benzopyrone chemistry</b> · biosynthesis · testing · pharmacology
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" id="railNav">
+    <button class="tab active" data-view="overview"><span class="num">01</span> Overview</button>
+    <button class="tab" data-view="diagrams"><span class="num">02</span> Diagrams</button>
+    <button class="tab" data-view="map"><span class="num">03</span> Topic Map</button>
+    <button class="tab" data-view="flash"><span class="num">04</span> Flash Cards</button>
+    <button class="tab" data-view="quiz"><span class="num">05</span> Quiz Bank</button>
+    <div class="rail-foot">Revision material built from lecture content on coumarins, chromones and their glycosides.</div>
+  </nav>
+
+  <main>
+
+    <!-- ===================== 1. OVERVIEW ===================== -->
+    <section class="view active" id="view-overview">
+      <div class="section-head">
+        <p class="eyebrow">Section 01</p>
+        <h2>Overview</h2>
+        <p class="sub">The definitions and facts worth knowing cold — not the full lecture. Read these before anything else.</p>
+      </div>
+
+      <div class="grid-cards">
+        <div class="card">
+          <div class="tag-row"><span class="chip">Origin</span></div>
+          <h3>What they are</h3>
+          <p>Coumarins and chromones are <b style="color:#f0ecdb">benzopyrone</b> derivatives, widely distributed secondary metabolites in higher plants, produced mainly through the <b style="color:#f0ecdb">phenylpropanoid (shikimic acid) pathway</b>.</p>
+        </div>
+
+        <div class="card">
+          <div class="tag-row"><span class="chip blue">Coumarin</span></div>
+          <h3>Coumarin core</h3>
+          <p>Coumarins are <b style="color:var(--glow-blue)">1,2-benzopyrones</b> (α-pyrone) — a benzene ring fused to an α-pyrone ring, carbonyl at position 2.</p>
+        </div>
+
+        <div class="card">
+          <div class="tag-row"><span class="chip green">Chromone</span></div>
+          <h3>Chromone core</h3>
+          <p>Chromones are <b style="color:var(--glow-green)">1,4-benzopyrones</b> (γ-pyrone) — isomeric with coumarins, but the carbonyl sits at position 4 instead of 2.</p>
+        </div>
+
+        <div class="card">
+          <h3>Coumarin subclasses</h3>
+          <ul>
+            <li>Simple coumarins — umbelliferone, esculetin, scopoletin</li>
+            <li>Furanocoumarins — linear (psoralens: psoralen, bergapten, xanthotoxin) and angular (angelicins)</li>
+            <li>Pyranocoumarins</li>
+            <li>Coumarin glycosides — aesculin</li>
+            <li>Bicoumarins — dicoumarol</li>
+            <li>Synthetic 4-hydroxycoumarins — warfarin, acenocoumarol</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Chromone groups</h3>
+          <ul>
+            <li>Simple chromones — chromone, 3-hydroxy/dihydroxychromone</li>
+            <li>Chromone derivatives — khellin, visnagin, cromolyn sodium, noreugenin</li>
+            <li>Xanthones — chromone fused with a phenyl ring (mangiferin, alpha-mangostin, gentisin)</li>
+            <li>Chromone C-glycosides — aloin A/B, aloesin, cassiaside</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>C-glycosides vs O-glycosides</h3>
+          <p>Chromone C-glycosides are joined by a <b style="color:#f0ecdb">C–C bond</b> between sugar and aglycone, so they resist hydrolysis. O-glycosides (like aesculin) use a C–O bond and hydrolyse more readily.</p>
+        </div>
+
+        <div class="card">
+          <div class="tag-row"><span class="chip">Landmark drug</span></div>
+          <h3>Warfarin &amp; dicoumarol</h3>
+          <p>Warfarin was inspired by <b style="color:#f0ecdb">dicoumarol</b>, which forms when coumarin in sweet clover is oxidised by fungi (<i>Aspergillus, Penicillium</i>). Both inhibit <b style="color:#f0ecdb">vitamin K epoxide reductase (VKORC1)</b>.</p>
+        </div>
+
+        <div class="card">
+          <h3>Biosynthesis, in one line</h3>
+          <p>Shikimic acid pathway → phenylalanine → (PAL) cinnamate → p-coumarate / caffeate / ferulate → CoA esters → ortho-hydroxylation → spontaneous <i>cis</i>-lactonisation → coumarin / umbelliferone / esculetin / scopoletin.</p>
+        </div>
+
+        <div class="card">
+          <div class="tag-row"><span class="chip blue">Test</span></div>
+          <h3>Identifying coumarins</h3>
+          <ul>
+            <li>UV 365 nm — blue fluorescence</li>
+            <li>Alkali test — greenish-blue (lactone ring opens)</li>
+            <li>FeCl₃ test — green (phenolic coumarins)</li>
+            <li>Ammonia vapour — enhances fluorescence of hydroxycoumarins</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="tag-row"><span class="chip green">Test</span></div>
+          <h3>Identifying chromones</h3>
+          <ul>
+            <li>Bontrager reaction — anthraquinone-related derivatives</li>
+            <li>UV fluorescence — yellow or green</li>
+            <li>TLC — distinct Rf in non-polar to moderately polar systems</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Pharmacology — coumarins</h3>
+          <ul>
+            <li>Anticoagulant — dicoumarol, warfarin</li>
+            <li>Anti-inflammatory — esculetin, aescin</li>
+            <li>Photosensitising — psoralens (PUVA)</li>
+            <li>Antioxidant &amp; antimicrobial</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Pharmacology — chromones</h3>
+          <ul>
+            <li>Bronchodilator — khellin</li>
+            <li>Antispasmodic — chromone derivatives</li>
+            <li>Anti-inflammatory — khellin analogues</li>
+            <li>Laxative — chromone C-glycosides in aloe (aloin)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Clinical applications</h3>
+          <ul>
+            <li>PUVA therapy — psoralens + UVA, for psoriasis/vitiligo</li>
+            <li>Venous insufficiency — aescin from horse chestnut</li>
+            <li>Asthma therapy precursor — khellin</li>
+            <li>GI formulations — aloe chromone glycosides</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Plant sources, quick list</h3>
+          <ul>
+            <li><i>Aesculus hippocastanum</i> — aesculin, aesculetin</li>
+            <li><i>Melilotus officinalis</i> — coumarin, dicoumarol</li>
+            <li><i>Ammi majus</i> — psoralen, xanthotoxin</li>
+            <li><i>Citrus bergamia</i> — bergapten, bergamottin</li>
+            <li><i>Ammi visnaga</i> — khellin, visnagin</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 2. DIAGRAMS ===================== -->
+    <section class="view" id="view-diagrams">
+      <div class="section-head">
+        <p class="eyebrow">Section 02</p>
+        <h2>Interactive diagrams</h2>
+        <p class="sub">Every figure and table from the material, made clickable. Tap a position, a branch, a step, or a spot.</p>
+      </div>
+
+      <!-- Diagram A: alpha vs gamma benzopyrone -->
+      <div class="diagram-block">
+        <h3>α-Benzopyrone vs γ-Benzopyrone</h3>
+        <p class="hint">Click a numbered ring position to see what sits there.</p>
+        <div class="flex-diagram">
+          <div class="ring-svg-wrap">
+            <svg width="230" height="190" viewBox="0 0 230 190">
+              <text x="10" y="14" fill="#cad6cb" font-size="11" font-family="IBM Plex Mono">[A] α-benzopyrone (coumarin)</text>
+              <polygon points="40,60 40,110 80,140 120,110 120,60 80,30" fill="none" stroke="#69cdff" stroke-width="1.6"/>
+              <polygon points="120,60 120,110 160,130 190,100 175,60 145,45" fill="none" stroke="#69cdff" stroke-width="1.6"/>
+              <g class="pos-dot" data-info="a2">
+                <circle cx="160" cy="130" r="6" fill="#69cdff" opacity="0.85"/>
+              </g>
+              <text x="163" y="150" class="pos-label">C2 (C=O)</text>
+              <g class="pos-dot" data-info="a-o1">
+                <circle cx="120" cy="110" r="6" fill="#e0a458" opacity="0.85"/>
+              </g>
+              <text x="96" y="128" class="pos-label">O1</text>
+              <g class="pos-dot" data-info="a-benz">
+                <circle cx="80" cy="85" r="6" fill="#c9e457" opacity="0.85"/>
+              </g>
+              <text x="55" y="88" class="pos-label">benzene ring</text>
+            </svg>
+          </div>
+          <div class="ring-svg-wrap">
+            <svg width="230" height="190" viewBox="0 0 230 190">
+              <text x="10" y="14" fill="#cad6cb" font-size="11" font-family="IBM Plex Mono">[B] γ-benzopyrone (chromone)</text>
+              <polygon points="40,60 40,110 80,140 120,110 120,60 80,30" fill="none" stroke="#c9e457" stroke-width="1.6"/>
+              <polygon points="120,60 120,110 160,130 190,100 175,60 145,45" fill="none" stroke="#c9e457" stroke-width="1.6"/>
+              <g class="pos-dot" data-info="g4">
+                <circle cx="145" cy="45" r="6" fill="#69cdff" opacity="0.85"/>
+              </g>
+              <text x="148" y="38" class="pos-label">C4 (C=O)</text>
+              <g class="pos-dot" data-info="g-o1">
+                <circle cx="120" cy="110" r="6" fill="#e0a458" opacity="0.85"/>
+              </g>
+              <text x="96" y="128" class="pos-label">O1</text>
+              <g class="pos-dot" data-info="g-benz">
+                <circle cx="80" cy="85" r="6" fill="#c9e457" opacity="0.85"/>
+              </g>
+              <text x="55" y="88" class="pos-label">benzene ring</text>
+            </svg>
+          </div>
+          <div class="caption-box" id="ringCaption">Click a coloured position on either ring to read what it means.</div>
+        </div>
+      </div>
+
+      <!-- Diagram B: classification tree -->
+      <div class="diagram-block">
+        <h3>Classification tree</h3>
+        <p class="hint">Expand a branch.</p>
+        <div class="tree">
+          <div class="tree-col">
+            <details class="branch">
+              <summary>Coumarins — 1,2-benzopyrone</summary>
+              <div class="branch-body">
+                <ul>
+                  <li><b>Simple</b> — umbelliferone, esculetin, scopoletin</li>
+                  <li><b>Furanocoumarins (linear)</b> — 6,7-furo fusion: psoralen, bergapten, xanthotoxin</li>
+                  <li><b>Furanocoumarins (angular)</b> — 7,8-furo fusion: angelicin</li>
+                  <li><b>Pyranocoumarins</b> — visnagin, khellin</li>
+                  <li><b>Coumarin glycosides</b> — aesculin (esculetin-6-O-glucoside)</li>
+                  <li><b>Bicoumarins</b> — dicoumarol</li>
+                  <li><b>Synthetic 4-hydroxycoumarins</b> — warfarin, acenocoumarol</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+          <div class="tree-col">
+            <details class="branch">
+              <summary>Chromones — 1,4-benzopyrone</summary>
+              <div class="branch-body">
+                <ul>
+                  <li><b>Simple chromones</b> — chromone, 3-hydroxy/dihydroxychromone</li>
+                  <li><b>Chromone derivatives</b> — khellin, visnagin, cromolyn sodium, noreugenin</li>
+                  <li><b>Xanthones</b> — chromone + phenyl ring: mangiferin, alpha-mangostin, gentisin</li>
+                  <li><b>Chromone C-glycosides</b> — aloin A/B, aloesin, cassiaside</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagram C: biosynthesis flow -->
+      <div class="diagram-block">
+        <h3>Biosynthesis pathway</h3>
+        <p class="hint">Click each step for its detail.</p>
+        <div class="flow" id="bioFlow">
+          <div class="flow-step" data-d="Starting amino acid feeding into the phenylpropanoid pathway.">B<br><b>Phenylalanine</b>amino acid</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" data-d="PAL (phenylalanine ammonia-lyase) removes ammonia to form cinnamate.">Enzyme: PAL<br><b>Cinnamate</b></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" data-d="C4H hydroxylates the ring to give p-coumarate; further hydroxylation/methylation gives caffeate and ferulate.">Enzyme: C4H<br><b>p-Coumarate / Caffeate / Ferulate</b></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" data-d="4CL activates the acid as a CoA thioester, the substrate for ortho-hydroxylation.">Enzyme: 4CL<br><b>CoA esters</b></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" data-d="Ortho-hydroxylation of the CoA ester gives a 2-hydroxycinnamoyl intermediate.">Ortho-<br><b>hydroxylation</b></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" data-d="Spontaneous cis-isomerisation and lactonisation close the pyrone ring — no enzyme required.">Spontaneous<br><b>lactonisation</b></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" data-d="End products: coumarin, umbelliferone, esculetin, scopoletin — the simple coumarins.">Result<br><b>Simple coumarins</b></div>
+        </div>
+        <div class="caption-box" id="flowCaption" style="margin-top:12px;">Click a step above to read the detail here.</div>
+      </div>
+
+      <!-- Diagram D: filterable comparison table -->
+      <div class="diagram-block">
+        <h3>Subclass comparison</h3>
+        <p class="hint">Filter by family.</p>
+        <div class="filter-chips" id="filterChips">
+          <button class="filter-chip active" data-f="all">All</button>
+          <button class="filter-chip" data-f="coumarin">Coumarins</button>
+          <button class="filter-chip" data-f="chromone">Chromones</button>
+        </div>
+        <table class="filter-table">
+          <thead><tr><th>Subclass</th><th>Structural feature</th><th>Key examples</th><th>Notes</th></tr></thead>
+          <tbody id="filterTbody">
+            <tr data-fam="coumarin"><td>Simple coumarins</td><td>Substituted benzopyrone</td><td>Umbelliferone, esculetin</td><td>Antioxidant, anti-inflammatory</td></tr>
+            <tr data-fam="coumarin"><td>Furanocoumarins (linear)</td><td>6,7-furo fusion</td><td>Psoralen, bergapten</td><td>Phototoxic, photosensitizer, skin therapy</td></tr>
+            <tr data-fam="coumarin"><td>Furanocoumarins (angular)</td><td>7,8-furo fusion</td><td>Angelicin</td><td>Less phototoxic</td></tr>
+            <tr data-fam="coumarin"><td>Pyranocoumarins</td><td>Pyran ring fused</td><td>Visnagin, khellin</td><td>Vasodilator</td></tr>
+            <tr data-fam="coumarin"><td>Coumarin glycosides</td><td>Coumarin + sugar</td><td>Aesculin</td><td>Soluble, storage forms</td></tr>
+            <tr data-fam="coumarin"><td>Bicoumarins</td><td>Two coumarins linked</td><td>Dicoumarol</td><td>Natural anticoagulant</td></tr>
+            <tr data-fam="coumarin"><td>Synthetic 4-hydroxycoumarins</td><td>4-OH coumarin, side chain</td><td>Warfarin, acenocoumarol</td><td>VKOR inhibitors</td></tr>
+            <tr data-fam="chromone"><td>Simple chromones</td><td>1,4-benzopyrone core</td><td>Chromone, 3-OH-dihydroxychromone</td><td>Fluorescent plant marker</td></tr>
+            <tr data-fam="chromone"><td>Chromone derivatives</td><td>Furo/pyrano-fused chromone</td><td>Khellin, visnagin, cromolyn</td><td>Bronchodilator, mast-cell stabilizer</td></tr>
+            <tr data-fam="chromone"><td>Xanthones</td><td>Chromone + phenyl ring</td><td>Mangiferin, alpha-mangostin, gentisin</td><td>Antioxidant, antimicrobial, anticancer</td></tr>
+            <tr data-fam="chromone"><td>Chromone C-glycosides</td><td>C–C sugar-aglycone bond</td><td>Aloin, aloesin, cassiaside</td><td>Hydrolysis-resistant, laxative</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Diagram E: UV plate simulator -->
+      <div class="diagram-block">
+        <h3>UV fluorescence plate</h3>
+        <p class="hint">Switch on the lamp, then click a spot.</p>
+        <div class="uv-stage">
+          <button class="uv-lamp-btn" id="lampBtn">Lamp: OFF</button>
+          <div class="plate">
+            <div class="lane">
+              <div class="spot-line"></div>
+              <div class="spot c-blue" data-name="Coumarin — blue fluorescence at 365 nm"></div>
+              <div>Coumarin</div>
+            </div>
+            <div class="lane">
+              <div class="spot-line"></div>
+              <div class="spot c-blue" data-name="Esculetin — blue fluorescence, greenish after alkali"></div>
+              <div>Esculetin</div>
+            </div>
+            <div class="lane">
+              <div class="spot-line"></div>
+              <div class="spot c-blue" data-name="Aesculin — blue fluorescence, glycoside form"></div>
+              <div>Aesculin</div>
+            </div>
+            <div class="lane">
+              <div class="spot-line"></div>
+              <div class="spot c-green" data-name="Khellin — yellow/green fluorescence, chromone"></div>
+              <div>Khellin</div>
+            </div>
+            <div class="lane">
+              <div class="spot-line"></div>
+              <div class="spot c-green" data-name="Visnagin — yellow/green fluorescence, chromone"></div>
+              <div>Visnagin</div>
+            </div>
+          </div>
+          <div class="caption-box" id="uvCaption" style="flex:1 1 220px;">Turn the lamp on, then tap a spot to identify it.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 3. TOPIC MAP ===================== -->
+    <section class="view" id="view-map">
+      <div class="section-head">
+        <p class="eyebrow">Section 03</p>
+        <h2>Topic map</h2>
+        <p class="sub">Tap a title on the left — its full note opens in the reading pane on the right, in place.</p>
+      </div>
+      <div class="map-wrap">
+        <div class="hex-grid" id="hexGrid"></div>
+        <div class="reading-pane" id="readingPane">
+          <p class="placeholder">Select a topic from the left to read its notes here.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 4. FLASH CARDS ===================== -->
+    <section class="view" id="view-flash">
+      <div class="section-head">
+        <p class="eyebrow">Section 04</p>
+        <h2>Flash cards</h2>
+        <p class="sub">Tap a card to flip it. Covers definitions, sources, chemistry, tests and pharmacology.</p>
+      </div>
+      <div class="filter-chips" id="fcLevelChips">
+        <button class="level-chip active" data-level="easy">Level 1 · Easy (60)</button>
+        <button class="level-chip" data-level="medium">Level 2 · Medium (50)</button>
+        <button class="level-chip" data-level="hard">Level 3 · Hard (40)</button>
+      </div>
+      <div class="fc-toolbar">
+        <button class="btn primary" id="fcPrev">← Prev</button>
+        <button class="btn primary" id="fcNext">Next →</button>
+        <button class="btn" id="fcShuffle">Shuffle</button>
+        <span class="fc-progress" id="fcProgress"></span>
+      </div>
+      <div class="fc-stage">
+        <div class="flip-card" id="flipCard">
+          <div class="flip-inner">
+            <div class="face front" id="fcFront">—<span class="cue">tap to flip</span></div>
+            <div class="face back" id="fcBack">—<span class="cue">tap to flip back</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-grid-index" id="fcIndex"></div>
+    </section>
+
+    <!-- ===================== 5. QUIZ BANK ===================== -->
+    <section class="view" id="view-quiz">
+      <div class="section-head">
+        <p class="eyebrow">Section 05</p>
+        <h2>Quiz bank</h2>
+        <p class="sub">Three difficulty levels (60 / 50 / 40 questions). Options are reshuffled every time a question is shown, so the correct answer's position always changes.</p>
+      </div>
+      <div class="filter-chips" id="quizLevelChips">
+        <button class="level-chip active" data-level="easy">Level 1 · Easy (60)</button>
+        <button class="level-chip" data-level="medium">Level 2 · Medium (50)</button>
+        <button class="level-chip" data-level="hard">Level 3 · Hard (40)</button>
+      </div>
+      <div class="quiz-wrap">
+        <div class="quiz-progress"><span id="quizPos">Question 1 / 60</span><span id="quizScore">Score: 0</span></div>
+        <div class="quiz-bar"><div class="quiz-bar-fill" id="quizBarFill"></div></div>
+        <div id="quizArea"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="site-foot">
+  <span>© Anmar Taha — all rights reserved.</span>
+  <span>Study Smart · Pharmacognosy revision material</span>
+</footer>
+
+<script>
+/* ---------------- Tab navigation ---------------- */
+const tabs = document.querySelectorAll('.tab');
+const views = document.querySelectorAll('.view');
+tabs.forEach(t=>{
+  t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('active'));
+    views.forEach(v=>v.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('view-'+t.dataset.view).classList.add('active');
+  });
+});
+
+/* ---------------- Diagram A: ring captions ---------------- */
+const ringInfo = {
+  'a2':'<b>C2 — carbonyl (α-pyrone)</b><br>In coumarins the lactone C=O sits at position 2. This is the defining feature of the 1,2-benzopyrone skeleton.',
+  'a-o1':'<b>O1 — ring oxygen</b><br>Shared between coumarins and chromones; part of the pyranone ring in both series.',
+  'a-benz':'<b>Fused benzene ring</b><br>Substitution here (hydroxylation, methoxylation, isoprenylation) generates the whole family of simple and furano/pyranocoumarins.',
+  'g4':'<b>C4 — carbonyl (γ-pyrone)</b><br>In chromones the lactone/ketone C=O sits at position 4 instead of 2 — this is the only structural difference from coumarins.',
+  'g-o1':'<b>O1 — ring oxygen</b><br>Same position as in coumarins; the isomerism is purely about where the carbonyl sits.',
+  'g-benz':'<b>Fused benzene ring</b><br>Substitution here builds xanthones (fusion with a phenyl ring) and chromone C-glycosides.'
+};
+document.querySelectorAll('.pos-dot').forEach(dot=>{
+  dot.addEventListener('click',()=>{
+    document.getElementById('ringCaption').innerHTML = ringInfo[dot.dataset.info];
+  });
+});
+
+/* ---------------- Diagram C: biosynthesis flow ---------------- */
+document.querySelectorAll('#bioFlow .flow-step').forEach(step=>{
+  step.addEventListener('click',()=>{
+    document.querySelectorAll('#bioFlow .flow-step').forEach(s=>s.classList.remove('sel'));
+    step.classList.add('sel');
+    document.getElementById('flowCaption').textContent = step.dataset.d;
+  });
+});
+
+/* ---------------- Diagram D: filter table ---------------- */
+document.querySelectorAll('.filter-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    const f = chip.dataset.f;
+    document.querySelectorAll('#filterTbody tr').forEach(row=>{
+      row.classList.toggle('row-hidden', f!=='all' && row.dataset.fam!==f);
+    });
+  });
+});
+
+/* ---------------- Diagram E: UV simulator ---------------- */
+const lampBtn = document.getElementById('lampBtn');
+let lampOn = false;
+lampBtn.addEventListener('click',()=>{
+  lampOn = !lampOn;
+  lampBtn.textContent = 'Lamp: ' + (lampOn ? 'ON' : 'OFF');
+  lampBtn.classList.toggle('on', lampOn);
+  document.querySelectorAll('.spot').forEach(s=>s.classList.toggle('lit', lampOn));
+});
+document.querySelectorAll('.spot').forEach(spot=>{
+  spot.addEventListener('click',()=>{
+    if(!lampOn){ document.getElementById('uvCaption').textContent = 'Switch the lamp on first.'; return; }
+    document.getElementById('uvCaption').textContent = spot.dataset.name;
+  });
+});
+
+/* ---------------- Topic map ---------------- */
+const topics = [
+  {t:'Aesculus hippocastanum', html:'<h3>Aesculus hippocastanum (horse chestnut)</h3><p>Contains <b>aesculin</b> and <b>aesculetin</b>. Aescin from this plant is used to treat venous insufficiency, acting as a veno-tonic with anti-edema effects.</p>'},
+  {t:'Melilotus officinalis', html:'<h3>Melilotus officinalis (sweet clover)</h3><p>Contains <b>coumarin</b> and <b>dicoumarol</b>. Dicoumarol forms when coumarin is oxidised by fungi such as <i>Aspergillus</i> and <i>Penicillium</i> — the natural anticoagulant that inspired warfarin.</p>'},
+  {t:'Ammi majus', html:'<h3>Ammi majus</h3><p>Contains <b>psoralen</b> and <b>xanthotoxin</b> — linear furanocoumarins used in PUVA therapy for psoriasis and vitiligo.</p>'},
+  {t:'Citrus bergamia', html:'<h3>Citrus bergamia (bergamot)</h3><p>Contains <b>bergapten</b> and <b>bergamottin</b>, both furanocoumarins with phototoxic and photosensitizing properties.</p>'},
+  {t:'Ferula spp.', html:'<h3>Ferula spp.</h3><p>Source of <b>umbelliferone</b> and various <b>furanocoumarins</b>.</p>'},
+  {t:'Ammi visnaga (Khella)', html:'<h3>Ammi visnaga (Khella)</h3><p>Contains <b>khellin</b>, <b>visnagin</b> and <b>khellinin</b>. Used traditionally as an antispasmodic, diuretic and bronchodilator. Khellin is the historical prototype behind modern asthma therapy and behind cromolyn sodium.</p>'},
+  {t:'Aloe species', html:'<h3>Aloe vera / Aloe ferox</h3><p>Rich in chromone C-glycosides such as <b>aloin</b> and <b>aloesin</b>. Aloin gives anthraquinone-like laxative effects; aloesin shows skin-lightening and anti-tyrosinase activity. Pharmacological actions: laxative, wound-healing, anti-inflammatory.</p>'},
+  {t:'Citrus species (PMCs)', html:'<h3>Citrus species</h3><p>Contain simple chromones and <b>polymethoxy chromones (PMCs)</b>, which show anticancer and anti-inflammatory activity.</p>'},
+  {t:'Cassia spp.', html:'<h3>Cassia spp.</h3><p>Contain <b>cassiaside</b> and related glycosides, used traditionally for skin and liver conditions; exhibits hepatoprotective and antioxidant activity.</p>'},
+  {t:'Xanthone sources', html:'<h3>Xanthone sources</h3><p><b>Mangiferin</b> — C-glycosyl xanthone from <i>Mangifera indica</i> (mango leaves); antioxidant, antidiabetic.<br><b>Alpha-mangostin</b> — from <i>Garcinia mangostana</i> pericarp; antimicrobial, anticancer.<br><b>Gentisin</b> — 1,3-dihydroxyxanthone from <i>Gentiana</i>.</p>'},
+  {t:'Warfarin & VKORC1', html:'<h3>Warfarin and VKORC1</h3><p>Synthetic 4-hydroxycoumarin inspired by <b>dicoumarol</b>. Inhibits <b>vitamin K epoxide reductase (VKORC1)</b>, blocking regeneration of active vitamin K and reducing clotting factor synthesis.</p>'},
+  {t:'PUVA therapy', html:'<h3>PUVA therapy</h3><p>Psoralens (from <i>Ammi majus</i>) combined with UVA light, used to treat <b>psoriasis</b> and <b>vitiligo</b>. Relies on the photosensitizing property of furanocoumarins.</p>'},
+  {t:'Biosynthesis pathway', html:'<h3>Biosynthesis pathway</h3><p>Shikimic acid pathway → phenylalanine → PAL → cinnamate → C4H → p-coumarate → 4CL → p-coumaroyl-CoA → ortho-hydroxylation → spontaneous lactonisation → simple coumarins (coumarin, umbelliferone, esculetin, scopoletin). Further modification of the pyrone ring gives 4-hydroxycoumarin and coumestrol; furano/pyrano fusion gives psoralen and xanthyletin.</p>'},
+  {t:'Identification tests', html:'<h3>Identification tests</h3><p><b>Coumarins:</b> blue UV fluorescence at 365 nm, alkali test (greenish-blue, lactone opens), FeCl₃ test (green, phenolic), ammonia vapour (enhances fluorescence).<br><b>Chromones:</b> Bontrager reaction (anthraquinone-related derivatives), yellow/green UV fluorescence, distinct TLC Rf values.</p>'},
+  {t:'Pharmacology summary', html:'<h3>Pharmacology summary</h3><p><b>Coumarins:</b> anticoagulant, anti-inflammatory, photosensitizing, antioxidant/antimicrobial.<br><b>Chromones:</b> bronchodilator, antispasmodic, anti-inflammatory, laxative.<br><b>Clinical:</b> PUVA therapy, venous insufficiency treatment (aescin), asthma therapy precursors (khellin), aloe-based GI formulations.</p>'}
+];
+const hexGrid = document.getElementById('hexGrid');
+const readingPane = document.getElementById('readingPane');
+topics.forEach((topic,i)=>{
+  const hex = document.createElement('div');
+  hex.className = 'hex';
+  hex.textContent = topic.t;
+  hex.addEventListener('click',()=>{
+    document.querySelectorAll('.hex').forEach(h=>h.classList.remove('sel'));
+    hex.classList.add('sel');
+    readingPane.innerHTML = topic.html;
+  });
+  hexGrid.appendChild(hex);
+});
+
+/* ---------------- Flash cards (3 difficulty levels) ---------------- */
+const flashEasy = [["What broad chemical class do coumarins and chromones belong to?", "Benzopyrone derivatives."], ["Where are coumarins and chromones widely distributed?", "In higher plants."], ["What type of metabolites are coumarins and chromones considered?", "Secondary metabolites."], ["Which biosynthetic pathway produces coumarins and chromones mainly?", "The phenylpropanoid pathway."], ["Coumarins are also known chemically as:", "α-Benzopyrones (1,2-benzopyrone derivatives)."], ["Chromones are also known chemically as:", "γ-Benzopyrones (1,4-benzopyrone derivatives)."], ["In coumarins, at which carbon does the carbonyl (C=O) sit?", "C2."], ["In chromones, at which carbon does the carbonyl (C=O) sit?", "C4."], ["What ring is fused to the pyrone ring in both coumarins and chromones?", "A benzene ring."], ["Name the four main subclasses of coumarins.", "Simple coumarins, furanocoumarins, pyranocoumarins, and coumarin glycosides."], ["Give three examples of simple coumarins.", "Umbelliferone, esculetin, and scopoletin."], ["What are linear furanocoumarins commonly called?", "Psoralens."], ["Give three examples of linear furanocoumarins (psoralens).", "Psoralen, bergapten, and xanthotoxin."], ["What are angular furanocoumarins commonly called?", "Angelicins."], ["What is aesculin chemically?", "Esculetin-6-O-glucoside."], ["Name three processes that create structural variation among coumarins.", "Hydroxylation, methoxylation, and isoprenylation."], ["Which natural compound inspired the development of warfarin?", "Dicoumarol."], ["Dicoumarol forms when coumarin in sweet clover is oxidized by what?", "Fungi (Aspergillus and Penicillium)."], ["Which enzyme does warfarin inhibit?", "Vitamin K epoxide reductase (VKORC1)."], ["What does Aesculus hippocastanum (horse chestnut) contain?", "Aesculin and aesculetin."], ["What does Melilotus officinalis (sweet clover) contain?", "Coumarin and dicoumarol."], ["What does Ammi majus contain?", "Psoralen and xanthotoxin."], ["What does Citrus bergamia (bergamot) contain?", "Bergapten and bergamottin."], ["What does Ferula spp. contain?", "Umbelliferone and furanocoumarins."], ["Chromones are isomeric with coumarins — but differ in what?", "The position of the lactone/carbonyl group."], ["What is the simplest chromone, described as the parent nucleus?", "Chromone itself."], ["Which simple chromone acts as a fluorescent marker in certain plant tissues?", "Chromone."], ["Where has 3-hydroxy-dihydroxychromone been identified?", "In some citrus and Fabaceae plants."], ["What is the plant source of khellin?", "Ammi visnaga."], ["What is visnagin used for pharmacologically?", "Coronary dilation (as a vasodilator)."], ["What is cromolyn sodium?", "A synthetic analog of khellin used as a mast-cell stabilizer for asthma and allergies."], ["What is noreugenin chemically?", "5,7-Dihydroxy-2-methylchromone."], ["In which plant genus is noreugenin found?", "Alpinia species."], ["How are xanthones formed biogenetically?", "By fusion of a chromone nucleus with a phenyl ring."], ["What type of xanthone is mangiferin?", "A C-glycosyl xanthone."], ["What is the plant source of mangiferin?", "Mangifera indica (mango leaves)."], ["What is the plant source of alpha-mangostin?", "Garcinia mangostana (mangosteen pericarp)."], ["What is gentisin chemically?", "1,3-Dihydroxyxanthone."], ["What is the plant source of gentisin?", "Gentiana species."], ["What bond distinguishes chromone C-glycosides from O-glycosides?", "A C–C bond between the sugar and the aglycone."], ["Name the major chromone C-glycosides found in Aloe.", "Aloin A and Aloin B."], ["What effect do aloin A and B produce?", "Anthraquinone-like laxative effects."], ["What is aloesin known for pharmacologically?", "Skin-lightening and anti-tyrosinase activity."], ["What is the plant source of cassiaside?", "Cassia tora."], ["What activity does cassiaside show?", "Hepatoprotective and antioxidant activity."], ["Which three compounds does Ammi visnaga (Khella) contain?", "Khellin, visnagin, and khellinin."], ["What are khellin, visnagin, and khellinin traditionally used for?", "Antispasmodic, diuretic, and bronchodilator effects."], ["What pharmacological actions are attributed to Aloe species (vera/ferox)?", "Laxative, wound-healing, and anti-inflammatory."], ["Besides simple chromones, what do citrus species contain?", "Polymethoxy chromones (PMCs)."], ["What activity do polymethoxy chromones (PMCs) show?", "Anticancer and anti-inflammatory activity."], ["What does Cassia spp. contain?", "Cassiaside and related glycosides."], ["What common biosynthetic pathway do coumarins and chromones both originate from?", "The shikimic acid pathway."], ["What color fluorescence do coumarins typically show under UV light at 365 nm?", "Blue fluorescence."], ["What coloration does the alkali test give for coumarins?", "A greenish-blue coloration, due to opening of the lactone ring."], ["What coloration does the ferric chloride test give for phenolic coumarins?", "Green coloration."], ["What effect does ammonia vapor have on hydroxycoumarins?", "It enhances their fluorescence."], ["Which test detects anthraquinone-related chromone derivatives?", "The Bontrager reaction."], ["What UV fluorescence colors do chromones typically show?", "Yellow or green fluorescence."], ["What is psoralen used for clinically?", "PUVA therapy, for psoriasis and vitiligo."], ["What is aescin (from horse chestnut) used for clinically?", "Treating venous insufficiency."]];
+const flashMedium = [["Compare the furan-ring fusion positions of linear versus angular furanocoumarins.", "Linear (psoralens) fuse at 6,7-positions; angular (angelicins) fuse at 7,8-positions."], ["Which furanocoumarin type — linear or angular — is more phototoxic, and which is less?", "Linear (psoralen-type) furanocoumarins are more phototoxic; angular (angelicin-type) are less phototoxic."], ["Why are coumarin glycosides like aesculin more water-soluble than their aglycones?", "A sugar moiety is attached via a glycosidic bond, making them soluble storage forms in the plant."], ["Why are chromone C-glycosides more resistant to hydrolysis than O-glycosides?", "Because the sugar is linked to the aglycone via a stable C–C bond instead of a hydrolyzable C–O bond."], ["Differentiate aloin from aloe-emodin in terms of chemical classification.", "Aloin is the chromone C-glycoside (primary classification); aloe-emodin is its derived anthraquinone form."], ["What is a bicoumarin, and what natural example is given?", "Two coumarin units linked together; the natural example is dicoumarol, a natural anticoagulant."], ["Name a synthetic 4-hydroxycoumarin anticoagulant besides warfarin.", "Acenocoumarol."], ["Explain how spoiled sweet clover leads to natural anticoagulant poisoning in livestock.", "Coumarin present in the clover is oxidized by fungi (Aspergillus, Penicillium) into dicoumarol, a potent natural anticoagulant."], ["Which enzyme converts phenylalanine into cinnamate in coumarin biosynthesis?", "PAL (phenylalanine ammonia-lyase)."], ["Which enzyme hydroxylates cinnamate to p-coumarate?", "C4H."], ["Which enzyme activates p-coumarate into its CoA-thioester form?", "4CL."], ["From which biosynthetic precursor is umbelliferone derived?", "p-Coumarate, via p-coumaroyl-CoA, ortho-hydroxylation, and spontaneous lactonization."], ["From which biosynthetic precursor is esculetin derived?", "Caffeate."], ["From which biosynthetic precursor is scopoletin derived?", "Ferulate."], ["Which enzymes catalyze ortho-hydroxylation of p-coumaroyl-CoA, and from which species?", "RgC2'H (from Ruta graveolens) and Ib2 (from Ipomoea batatas)."], ["Which enzymes catalyze hydroxylation of feruloyl-CoA, and from which species?", "AtF6'H1 (from Arabidopsis) and Ib1/Ib2 (from Ipomoea batatas)."], ["Name the four 'simple coumarins' produced at the end of the core biosynthetic branch.", "Coumarin, umbelliferone, esculetin, and scopoletin."], ["Which two compounds represent 'coumarins with modification in the pyrone ring'?", "4-Hydroxycoumarin and coumestrol."], ["Which two compounds represent the furano/pyranocoumarin branch of the biosynthetic scheme?", "Psoralen and xanthyletin."], ["What is the structural relationship (R group) between visnagin and khellin?", "Visnagin has R = H; khellin has R = OCH₃, on the same furochromone skeleton."], ["How is cromolyn sodium related to khellin?", "It is a synthetic analog developed from khellin's chromone structure, used as a mast-cell stabilizer."], ["Contrast the pharmacological roles of esculetin/aescin versus khellin/visnagin.", "Esculetin and aescin act as anti-inflammatory veno-tonics; khellin and visnagin act as bronchodilator/vasodilator agents."], ["What clinical therapy links psoralens with UVA light, and for what conditions?", "PUVA therapy, used for psoriasis and vitiligo."], ["What happens chemically in the alkali test for coumarins?", "The lactone ring of the coumarin opens under alkaline conditions, producing a greenish-blue coloration."], ["Contrast the UV fluorescence colors of coumarins versus chromones.", "Coumarins show blue fluorescence; chromones show yellow or green fluorescence."], ["Structurally, how do xanthones differ from chromones?", "Xanthones are tricyclic — a chromone nucleus fused with an extra phenyl ring — whereas chromones are bicyclic."], ["Why is mangiferin called a 'C-glycosyl xanthone'?", "Because its sugar unit is attached to the xanthone aglycone via a carbon-carbon bond, not an oxygen bond."], ["Contrast the plant sources and activities of mangiferin versus alpha-mangostin.", "Mangiferin: mango leaves, antioxidant/antidiabetic. Alpha-mangostin: mangosteen pericarp, antimicrobial/anticancer."], ["Why do hydroxylation, methoxylation, and isoprenylation matter for coumarin diversity?", "These modifications on the benzene ring generate the structural diversity seen across simple, furano-, and pyranocoumarin subclasses."], ["Give one example each of a simple chromone and a chromone derivative, with an activity.", "Chromone itself (fluorescent marker) versus khellin (bronchodilator, from Ammi visnaga)."], ["How does Ammi visnaga's traditional use connect to modern asthma drugs?", "Khellin's antispasmodic/bronchodilator action historically served as the prototype for developing asthma bronchodilator therapy."], ["Explain the biosynthetic and pharmacological link between dicoumarol and warfarin.", "Dicoumarol, a natural bicoumarin anticoagulant, inspired synthesis of warfarin; both inhibit VKORC1."], ["Why is aloin classified separately from aloe-emodin despite sharing a plant source?", "Aloin is the intact chromone C-glycoside, while aloe-emodin is the anthraquinone aglycone that is its derived form."], ["What does the ferric chloride test specifically detect, versus the alkali test, in coumarins?", "FeCl₃ detects phenolic (hydroxylated) coumarins via a green color; the alkali test detects lactone-ring opening in coumarins generally."], ["Summarize the key chromone-type compound class for Aloe, Citrus, and Cassia sources.", "Aloe: chromone C-glycosides (aloin, aloesin). Citrus: simple chromones plus PMCs. Cassia: cassiaside-type glycosides."], ["Differentiate furanocoumarins from pyranocoumarins by their fused ring type.", "Furanocoumarins have a furan ring fused; pyranocoumarins have a pyran ring fused to the coumarin nucleus."], ["Give an example of a pyranocoumarin and its pharmacological action.", "Visnagin or khellin, acting as vasodilators."], ["How do psoralens exert their therapeutic effect in PUVA therapy?", "They photosensitize the skin when combined with UVA light, used for psoriasis and vitiligo."], ["What is the relationship between esculin (aesculin) and esculetin?", "Esculin is the glycoside form (esculetin-6-O-glucoside) of the aglycone esculetin."], ["Why are coumarin glycosides considered 'storage forms' in plants?", "Glycosylation increases water solubility, allowing storage/transport before hydrolysis releases the active aglycone."], ["Contrast the structural feature of anticoagulant coumarins with that of anti-inflammatory coumarins.", "Anticoagulants are 4-hydroxycoumarins with a bulky side chain (warfarin, acenocoumarol); anti-inflammatory coumarins (esculetin, aescin) act as veno-tonics."], ["What is the connection between Ammi majus and PUVA therapy?", "Ammi majus is the plant source of psoralen and xanthotoxin, the furanocoumarins used in PUVA therapy."], ["Compare the position of the ring oxygen (O1) in coumarins and chromones.", "O1 occupies the same relative position in both skeletons; only the carbonyl position (C2 vs C4) differs."], ["Why are khellin and visnagin classed as chromone 'derivatives' rather than 'simple chromones'?", "They carry an additional fused furan ring (furochromone) and substitution, making them structurally more complex than the basic chromone nucleus."], ["What is aescin's pharmacological significance, and its plant source?", "Aescin, from Aesculus hippocastanum, treats venous insufficiency as a veno-tonic with anti-edema effect."], ["Compare how bicoumarins and coumarin glycosides are each built structurally.", "Bicoumarins link two coumarin units together (e.g., dicoumarol); coumarin glycosides link one coumarin unit to a sugar (e.g., aesculin)."], ["Which subclass of coumarins is most associated with phototoxicity, and why?", "Furanocoumarins (linear/psoralen-type), because their planar structure allows DNA intercalation under UV light."], ["What activity distinguishes chromone C-glycosides in Aloe from O-glycosides like aesculin, pharmacologically?", "Chromone C-glycosides (aloin) resist hydrolysis and act as laxatives via colonic bacterial metabolism, unlike readily hydrolyzed O-glycosides."], ["Why is the term '1,2-benzopyrone' used interchangeably with 'coumarin'?", "Because the carbonyl in coumarins sits at position 2, adjacent to the ring oxygen at position 1, defining the α-pyrone/1,2-benzopyrone skeleton."], ["Why is the term '1,4-benzopyrone' used interchangeably with 'chromone'?", "Because the carbonyl in chromones sits at position 4, across the ring from the oxygen at position 1, defining the γ-pyrone/1,4-benzopyrone skeleton."]];
+const flashHard = [["Trace the full biosynthetic sequence, with enzymes and compound numbers, from phenylalanine (9) to umbelliferone (2).", "Phenylalanine(9) →PAL→ Cinnamate(10) →C4H→ p-Coumarate(11) →4CL→ p-Coumaroyl-CoA(14) →RgC2'H/Ib2 (ortho-hydroxylation)→ compound(17) →spontaneous lactonization→ Umbelliferone(2)."], ["Trace the biosynthetic sequence from ferulate (13) to scopoletin (4), with enzymes and intermediates.", "Ferulate(13) →4CL→ Feruloyl-CoA(15) →AtF6'H1/Ib1,2 (hydroxylation)→ compound(19) →spontaneous lactonization→ Scopoletin(4)."], ["What compound number is caffeate in the biosynthetic scheme, and what simple coumarin does it lead to?", "Caffeate is compound (12); it leads via intermediate (18) spontaneously to esculetin (3)."], ["What is the key difference between the routes to coumarin (1) and umbelliferone (2), both stemming from p-coumarate-type intermediates?", "Coumarin(1) forms via intermediate (16) without an added ring hydroxyl, while umbelliferone(2) results from ortho-hydroxylation of the intermediate (17) followed by spontaneous lactonization, installing an extra 7-OH group."], ["Which compounds are labeled 'coumarins with modification in the pyrone ring,' and how do they differ from simple coumarins?", "4-Hydroxycoumarin(7) and coumestrol(8); they carry modifications within the pyrone ring itself rather than just substitution on the benzene ring."], ["Which two compounds represent the furano/pyranocoumarin branch, and what are their numbers?", "Psoralen(5) and xanthyletin(6)."], ["What compound number is assigned to daphnetin, and from which branch does it arise?", "Daphnetin(20); it arises as further modification from the esculetin-related branch of the pathway."], ["Distinguish coumestrol from 4-hydroxycoumarin structurally within the modified-pyrone-ring group.", "4-Hydroxycoumarin is a simple hydroxylated coumarin lactone; coumestrol carries an additional fused benzofuran ring system, making it structurally more complex."], ["What biosynthetic step do RgC2'H (from Ruta graveolens) and Ib2 (from Ipomoea batatas) catalyze?", "Ortho-hydroxylation of p-coumaroyl-CoA, enabling spontaneous lactonization to umbelliferone."], ["What is notable about AtF6'H1 (Arabidopsis) and Ib1/Ib2 (I. batatas) despite catalyzing a similar reaction?", "They are analogous hydroxylases from different plant species that both catalyze ortho-hydroxylation of feruloyl-CoA en route to scopoletin — convergent enzymatic function across species."], ["Why does spontaneous lactonization occur only after ortho-hydroxylation of the CoA-thioester intermediates?", "Cis-isomerization of the ortho-hydroxycinnamoyl-CoA ester allows intramolecular cyclization of the ortho-OH onto the carbonyl, forming the lactone spontaneously without further enzymatic help."], ["Explain how the single carbonyl-position difference (C2 vs C4) changes coumarins into an entirely different pharmacophore class from chromones.", "Coumarins (C2 carbonyl) form an ortho-fused lactone/ester system prone to alkaline hydrolysis, while chromones (C4 carbonyl) form a cross-conjugated ketone system that is chemically more stable — a single positional shift alters both reactivity and pharmacology."], ["Why do linear (6,7-fused) furanocoumarins show stronger phototoxicity than angular (7,8-fused) isomers?", "Linear fusion gives a planar, elongated tricyclic system able to intercalate DNA and form photoadducts under UVA; angular fusion distorts this planarity, reducing intercalation and phototoxicity."], ["Relate warfarin's mechanism to the biosynthetic origin of its structural template.", "Warfarin, a synthetic 4-hydroxycoumarin, mimics dicoumarol (formed by fungal oxidation of coumarin in spoiled sweet clover); both inhibit VKORC1, blocking vitamin K regeneration needed for clotting factor synthesis."], ["Why does aloin resist hydrolysis and produce a delayed laxative effect?", "Its C–C glycosidic bond is not cleaved by glycosidases or dilute acid, so it survives upper GI transit and is instead metabolized by colonic bacteria, delaying its laxative action."], ["How does cromolyn sodium exemplify drug design from a natural lead compound?", "Khellin (a furochromone from Ammi visnaga) showed bronchodilator activity but limited tolerability; structural modification produced cromolyn sodium, retaining chromone-based mast-cell stabilizing action with an improved therapeutic profile."], ["Why are xanthones described as 'biogenetically related' to chromones rather than an unrelated class?", "Xanthones form by fusing a chromone nucleus with an extra phenyl ring, creating a tricyclic dibenzo-γ-pyrone system that still shares the chromone's γ-pyrone core."], ["Explain the structural logic behind coumestrol arising from 'modification of the pyrone ring.'", "Coumestrol's pyranone ring is fused with an additional benzofuran-type ring system, distinguishing it from a simply substituted coumarin like 4-hydroxycoumarin, which lacks this extra ring fusion."], ["Why is aescin pharmacologically distinct from esculin/esculetin despite sharing a plant source?", "Aescin is a triterpenoid saponin (not a coumarin) acting on venous tone, whereas esculin and esculetin are the coumarin glycoside/aglycone pair with separate antioxidant/anti-inflammatory activity — different scaffolds co-occurring in the same plant."], ["What single substituent differentiates khellin from visnagin, and where is it located?", "A methoxy group (OCH₃): khellin bears R = OCH₃, while visnagin bears R = H, at the same position on the furochromone nucleus."], ["Contrast the substrates hydroxylated by RgC2'H versus AtF6'H1.", "RgC2'H (and Ib2) hydroxylate p-coumaroyl-CoA toward umbelliferone; AtF6'H1 (and Ib1/Ib2) hydroxylate the already-methoxylated feruloyl-CoA toward scopoletin — the same reaction type acting on differently substituted substrates."], ["What happens chemically to the coumarin lactone ring during the alkali test, and why doesn't this apply the same way to chromones?", "Alkaline hydrolysis opens the α-pyrone lactone (ester bond cleavage), giving a hydroxycinnamate salt and greenish-blue color; chromones lack this lactone (they have a C4 ketone), so they do not react the same way."], ["What does 'compound 16 to compound 17' represent in the p-coumarate branch of the pathway?", "Compound 16 leads directly to coumarin(1) without extra hydroxylation, while the ortho-hydroxylated intermediate 17 leads onward to umbelliferone(2) after spontaneous lactonization."], ["Why does PUVA therapy require both a furanocoumarin and UVA light rather than the furanocoumarin alone?", "Furanocoumarins must intercalate DNA and then be activated by UVA photons to form photoadducts with pyrimidine bases; without UVA activation, the psoralen is pharmacologically inert for this purpose."], ["Compare the structural-pharmacological relationship among aloin, aloesin, and cassiaside.", "All are chromone-type glycosides, but aloin/aloesin (from Aloe) drive laxative/skin-lightening effects, while cassiaside (from Cassia tora) drives hepatoprotective/antioxidant effects — related structurally but diverging pharmacologically by species."], ["Why is mangiferin's stability partly attributed to its C-glycosidic linkage?", "The C–C bond confers resistance to hydrolysis, allowing the intact glycoside to persist and exert systemic antioxidant/antidiabetic effects rather than being rapidly cleaved like an O-glycoside."], ["How do the four coumarin identification tests collectively distinguish simple coumarins from phenolic (hydroxylated) coumarins?", "All coumarins give blue UV fluorescence and a positive alkali test, but only phenolic coumarins give a green FeCl₃ color and enhanced ammonia-vapor fluorescence, since those two tests target free phenolic -OH groups."], ["Why is the Bontrager reaction more associated with anthraquinone-type chromone derivatives (e.g., aloin) than with simple chromones like khellin?", "The Bontrager reaction detects anthraquinone/anthrone-type chromophores; aloin's laxative chemistry involves anthrone-related structures, whereas khellin's furochromone skeleton lacks this chromophore."], ["Is the shikimic acid pathway alone sufficient to explain xanthone formation?", "No — while the phenylpropanoid route builds the initial chromone-type core, xanthone formation additionally requires fusion with a second phenyl ring, a further biogenetic step beyond the basic pathway."], ["Why might scopoletin show weaker ferric chloride reactivity than esculetin?", "FeCl₃ detects free phenolic -OH groups; esculetin has two free hydroxyls, while scopoletin has one hydroxyl and one methoxylated position, reducing the number of reactive free -OH groups."], ["Why might horse-chestnut extracts combine aescin with esculin/esculetin-type coumarins therapeutically?", "Aescin provides the primary veno-tonic/anti-edema saponin action, while the coumarin constituents add complementary anti-inflammatory/antioxidant, capillary-protective effects — a synergy from two distinct phytochemical classes."], ["Why are psoralen-type furanocoumarins called 'linear' and angelicin-type furanocoumarins called 'angular'?", "6,7-fusion creates a furan ring collinear with the coumarin's long axis ('linear,' psoralen); 7,8-fusion creates a furan ring set at an angle ('angular,' angelicin) — this geometry also underlies their differing phototoxic potential."], ["Why is warfarin preferred clinically over dicoumarol despite both inhibiting VKORC1?", "Warfarin was engineered as a synthetic 4-hydroxycoumarin with more predictable pharmacokinetics/potency, whereas dicoumarol, the natural lead compound, is less standardized for clinical dosing."], ["How can the chromone parent nucleus give rise to both simple derivatives (noreugenin) and complex furochromones (khellin, visnagin)?", "The core γ-pyrone chromone skeleton permits extensive substitution (hydroxylation/methylation, giving noreugenin) or additional furan-ring fusion (giving khellin/visnagin), all while retaining the same base nucleus."], ["Explain aesculin's role as a 'storage-to-active-form' example in plant metabolism.", "Aesculin (esculetin-6-O-glucoside) links esculetin to a sugar via a hydrolyzable O-glycosidic bond; glycosylation aids solubility/storage, and enzymatic hydrolysis upon tissue damage releases active esculetin."], ["Why do aloin's and aesculin's hydrolysis kinetics differ so markedly despite both being storage glycosides?", "Aesculin's O-glycosidic bond is readily hydrolyzed by glycosidases/mild acid, releasing esculetin quickly; aloin's C-glycosidic bond resists this, requiring colonic bacterial metabolism, explaining aloin's delayed laxative action."], ["Why does ring-fusion type (furan vs pyran), not just the coumarin core, dictate a coumarin derivative's pharmacological class?", "Furan-fused psoralens intercalate DNA and photoreact under UVA (photosensitizers), while pyran-fused compounds relax vascular/bronchial smooth muscle (vasodilators/bronchodilators) — the added heterocycle, not the coumarin core alone, determines the resulting activity."], ["Differentiate the biosynthetic roles of isoprenylation versus heterocycle fusion in generating coumarin diversity.", "Isoprenylation adds a prenyl side chain to the benzene ring, which can subsequently cyclize into a pyran/furan ring; heterocycle fusion is the resulting structural outcome (e.g., furanocoumarins, pyranocoumarins) — isoprenylation is often a precursor step to fusion."], ["Why can Ammi visnaga and Ammi majus, two species of the same genus, yield pharmacologically distinct compound classes?", "Despite shared genus-level phenylpropanoid biosynthesis, A. visnaga channels metabolism toward chromone-type furochromones (khellin, visnagin), while A. majus channels it toward coumarin-type furanocoumarins (psoralen, xanthotoxin) — species-specific branch-point differences."], ["Summarize how one biosynthetic origin diverges into anticoagulant, photosensitizing, vasodilator, bronchodilator, laxative, and antioxidant activities.", "All arise from phenylalanine via the shikimate/phenylpropanoid route; the first branch is carbonyl position (C2→coumarins, C4→chromones), followed by hydroxylation/methoxylation (simple coumarins), heterocycle fusion (furanocoumarins→PUVA; pyranocoumarins→vasodilators), oxidative dimerization (bicoumarins→anticoagulants, engineered to warfarin), and glycosylation (O- vs C-linked→storage forms or, in chromone C-glycosides, laxative action); chromones further branch into xanthones (via phenyl-ring fusion, antioxidant/anticancer) and furochromones (khellin/visnagin→bronchodilator/vasodilator, engineered to cromolyn sodium)."]];
+const flashLevels = { easy: flashEasy, medium: flashMedium, hard: flashHard };
+let fcLevel = 'easy';
+let flashcards = flashLevels[fcLevel];
+let fcOrder = flashcards.map((_,i)=>i);
+let fcIndex = 0;
+const flipCard = document.getElementById('flipCard');
+const fcFront = document.getElementById('fcFront');
+const fcBack = document.getElementById('fcBack');
+const fcProgress = document.getElementById('fcProgress');
+const fcIndexWrap = document.getElementById('fcIndex');
+
+function renderFlashDots(){
+  fcIndexWrap.innerHTML='';
+  fcOrder.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'fc-dot' + (i===fcIndex?' cur':'');
+    d.addEventListener('click',()=>{ fcIndex=i; showCard(); });
+    fcIndexWrap.appendChild(d);
+  });
+}
+function showCard(){
+  flipCard.classList.remove('flipped');
+  const [q,a] = flashcards[fcOrder[fcIndex]];
+  fcFront.innerHTML = q + '<span class="cue">tap to flip</span>';
+  fcBack.innerHTML = a + '<span class="cue">tap to flip back</span>';
+  fcProgress.textContent = 'Card ' + (fcIndex+1) + ' / ' + fcOrder.length;
+  renderFlashDots();
+}
+flipCard.addEventListener('click',()=> flipCard.classList.toggle('flipped'));
+document.getElementById('fcNext').addEventListener('click',()=>{ fcIndex=(fcIndex+1)%fcOrder.length; showCard(); });
+document.getElementById('fcPrev').addEventListener('click',()=>{ fcIndex=(fcIndex-1+fcOrder.length)%fcOrder.length; showCard(); });
+document.getElementById('fcShuffle').addEventListener('click',()=>{
+  for(let i=fcOrder.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [fcOrder[i],fcOrder[j]]=[fcOrder[j],fcOrder[i]]; }
+  fcIndex=0; showCard();
+});
+document.querySelectorAll('#fcLevelChips .level-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('#fcLevelChips .level-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    fcLevel = chip.dataset.level;
+    flashcards = flashLevels[fcLevel];
+    fcOrder = flashcards.map((_,i)=>i);
+    fcIndex = 0;
+    showCard();
+  });
+});
+showCard();
+
+/* ---------------- Quiz bank (3 difficulty levels) ---------------- */
+const quizEasy = [["Coumarins and chromones are best described chemically as:", ["Flavone derivatives", "Benzopyrone derivatives", "Alkaloid derivatives", "Terpenoid derivatives"], 1], ["Coumarins and chromones are widely distributed in:", ["Marine algae", "Fungi only", "Higher plants", "Bacteria"], 2], ["Coumarins and chromones are classified biologically as:", ["Primary metabolites", "Secondary metabolites", "Structural proteins", "Nucleic acids"], 1], ["Coumarins and chromones are produced mainly through the:", ["Mevalonate pathway", "Phenylpropanoid pathway", "Krebs cycle", "Glycolysis pathway"], 1], ["Coumarins are chemically classified as:", ["1,4-benzopyrone derivatives", "1,2-benzopyrone derivatives", "Flavone derivatives", "Anthraquinone derivatives"], 1], ["Chromones are chemically classified as:", ["1,2-benzopyrone derivatives", "1,4-benzopyrone derivatives", "Coumarin glycosides", "Xanthone derivatives"], 1], ["In the coumarin skeleton, the lactone carbonyl sits at position:", ["C2", "C3", "C4", "C6"], 0], ["In the chromone skeleton, the carbonyl sits at position:", ["C2", "C3", "C4", "C7"], 2], ["Both coumarins and chromones share a fused:", ["Furan ring", "Benzene ring", "Pyridine ring", "Thiophene ring"], 1], ["Which is NOT one of the four main coumarin subclasses?", ["Simple coumarins", "Furanocoumarins", "Pyranocoumarins", "Xanthone coumarins"], 3], ["Which of these is a simple coumarin?", ["Psoralen", "Umbelliferone", "Angelicin", "Khellin"], 1], ["Linear furanocoumarins are also known as:", ["Angelicins", "Psoralens", "Xanthones", "Chromenes"], 1], ["Which is a linear furanocoumarin (psoralen-type)?", ["Angelicin", "Bergapten", "Khellin", "Aloin"], 1], ["Angular furanocoumarins are also known as:", ["Psoralens", "Angelicins", "Seselins", "Coumestans"], 1], ["Aesculin is chemically:", ["Esculetin-6-O-glucoside", "Coumarin-3-O-glucoside", "Umbelliferone glycoside", "Warfarin metabolite"], 0], ["Structural variation among coumarins arises mainly from:", ["Random mutation only", "Hydroxylation, methoxylation, isoprenylation, or heterocycle fusion", "Amino acid substitution", "Glycolysis differences"], 1], ["Warfarin's structure was inspired by the natural compound:", ["Esculetin", "Dicoumarol", "Khellin", "Mangiferin"], 1], ["Dicoumarol forms naturally when coumarin in sweet clover is oxidized by:", ["Bacteria", "Fungi (Aspergillus, Penicillium)", "Insects", "UV light alone"], 1], ["Warfarin inhibits which enzyme?", ["Cyclooxygenase", "Vitamin K epoxide reductase (VKORC1)", "Monoamine oxidase", "Acetylcholinesterase"], 1], ["Aesculus hippocastanum (horse chestnut) is a source of:", ["Psoralen and xanthotoxin", "Aesculin and aesculetin", "Bergapten and bergamottin", "Khellin and visnagin"], 1], ["Melilotus officinalis (sweet clover) contains:", ["Aesculin", "Coumarin and dicoumarol", "Bergapten", "Khellin"], 1], ["Ammi majus is a source of:", ["Coumarin and dicoumarol", "Psoralen and xanthotoxin", "Umbelliferone and furanocoumarins", "Aesculin and aesculetin"], 1], ["Citrus bergamia (bergamot) contains:", ["Bergapten and bergamottin", "Coumarin and dicoumarol", "Khellin and visnagin", "Cassiaside"], 0], ["Ferula spp. is notable as a source of:", ["Umbelliferone and furanocoumarins", "Aesculin", "Mangiferin", "Aloin"], 0], ["Chromones are isomeric with coumarins but differ in:", ["Molecular formula", "The position of the lactone/carbonyl group", "Number of rings", "Presence of oxygen"], 1], ["The simplest chromone, described as the parent nucleus, is:", ["Umbelliferone", "Chromone", "Khellin", "Xanthone"], 1], ["Which simple chromone acts as a fluorescent marker in plant tissues?", ["Chromone itself", "Mangiferin", "Aloin", "Dicoumarol"], 0], ["3-Hydroxy-dihydroxychromone has been identified in:", ["Some citrus and Fabaceae plants", "Only Aloe species", "Only Gentiana species", "Only fungi"], 0], ["Which plant is the source of khellin and visnagin?", ["Ammi majus", "Ammi visnaga", "Aesculus hippocastanum", "Citrus bergamia"], 1], ["Visnagin is pharmacologically used for:", ["Coronary dilation", "Anticoagulation", "Photosensitization", "Laxative effect"], 0], ["Cromolyn sodium is:", ["A natural coumarin", "A synthetic analog of khellin used as a mast-cell stabilizer", "A furanocoumarin used in PUVA", "An anthraquinone laxative"], 1], ["Noreugenin is chemically:", ["5,7-dihydroxy-2-methylchromone", "1,3-dihydroxyxanthone", "Esculetin glycoside", "A furanocoumarin"], 0], ["Noreugenin is found in which plant genus?", ["Alpinia", "Gentiana", "Cassia", "Garcinia"], 0], ["Xanthones are biogenetically formed by fusion of:", ["Two pyrone rings", "A chromone nucleus with a phenyl ring", "Two benzene rings only", "A furan with a pyranone"], 1], ["Mangiferin is best described as:", ["A C-glycosyl xanthone", "An O-glycosyl coumarin", "An anthraquinone", "A furochromone"], 0], ["Mangiferin is found mainly in:", ["Aloe vera", "Mangifera indica (mango leaves)", "Garcinia mangostana", "Gentiana"], 1], ["Alpha-mangostin is obtained from:", ["Garcinia mangostana (mangosteen pericarp)", "Mangifera indica", "Gentiana", "Citrus bergamia"], 0], ["Gentisin is:", ["1,3-dihydroxyxanthone from Gentiana", "A furanocoumarin from Ammi majus", "A coumarin glycoside", "A pyranocoumarin"], 0], ["The distinguishing bond in chromone C-glycosides (versus O-glycosides) is:", ["A C–O bond", "A C–C bond between sugar and aglycone", "An N–C bond", "An S–C bond"], 1], ["Aloin A and B are classified as:", ["O-glycoside coumarins", "Chromone C-glycosides", "Furanocoumarins", "Xanthone glycosides"], 1], ["Aloin A and B are major constituents of:", ["Ammi visnaga", "Aloe vera and Aloe ferox", "Citrus bergamia", "Gentiana"], 1], ["Aloin A and B are primarily responsible for:", ["Anticoagulant effects", "Anthraquinone-like laxative effects", "Photosensitization", "Bronchodilation"], 1], ["Aloesin is notable pharmacologically for:", ["Anticoagulant activity", "Skin-lightening / anti-tyrosinase activity", "Bronchodilation", "Photosensitization"], 1], ["Cassiaside is obtained from:", ["Cassia tora", "Gentiana", "Garcinia mangostana", "Aesculus hippocastanum"], 0], ["Cassiaside, from Cassia tora, is known for:", ["Anticoagulant activity", "Hepatoprotective and antioxidant activity", "Photosensitizing activity", "Laxative anthraquinone activity only"], 1], ["Ammi visnaga (Khella) contains which three constituents?", ["Khellin, visnagin, khellinin", "Psoralen, bergapten, xanthotoxin", "Aesculin, aesculetin, coumarin", "Mangiferin, gentisin, aloin"], 0], ["Ammi visnaga constituents are traditionally used as:", ["Anticoagulants", "Antispasmodic, diuretic, bronchodilator", "Laxatives only", "Photosensitizers"], 1], ["Aloe species (vera, ferox) show which pharmacological actions?", ["Anticoagulant, antifungal, antiviral", "Laxative, wound-healing, anti-inflammatory", "Bronchodilator, antispasmodic only", "Photosensitizing only"], 1], ["Citrus species are notable for containing:", ["Furanocoumarins only", "Polymethoxy chromones (PMCs)", "Xanthones only", "Bicoumarins"], 1], ["Polymethoxy chromones (PMCs) in citrus show:", ["Anticancer and anti-inflammatory activity", "Anticoagulant activity only", "Laxative activity only", "Photosensitizing activity only"], 0], ["Cassia spp. contains:", ["Khellin and visnagin", "Cassiaside and related glycosides", "Aesculin and aesculetin", "Bergapten and bergamottin"], 1], ["Both coumarins and chromones originate biosynthetically from the:", ["Mevalonate pathway", "Shikimic acid pathway", "Polyketide pathway", "Nitrogen fixation pathway"], 1], ["Under UV light at 365 nm, coumarins typically show:", ["Yellow fluorescence", "Blue fluorescence", "Red fluorescence", "No fluorescence"], 1], ["The alkali test for coumarins produces:", ["A yellow precipitate", "A greenish-blue coloration due to lactone ring opening", "A red coloration", "No visible change"], 1], ["The ferric chloride test for phenolic coumarins gives:", ["Green coloration", "Blue coloration", "Yellow precipitate", "No color change"], 0], ["Ammonia vapor exposure on hydroxycoumarins:", ["Destroys fluorescence", "Enhances fluorescence", "Has no effect", "Converts them to chromones"], 1], ["The Bontrager reaction is used to detect:", ["Coumarin lactones", "Anthraquinone-related chromone derivatives", "Flavonoid glycosides", "Alkaloids"], 1], ["Chromones typically show which UV fluorescence colors?", ["Blue only", "Yellow or green", "Red", "Colorless"], 1], ["Which coumarin derivative is used clinically in PUVA therapy?", ["Umbelliferone", "Psoralen", "Dicoumarol", "Aescin"], 1], ["Aescin, from horse chestnut, is used to treat:", ["Venous insufficiency", "Asthma", "Psoriasis", "Blood coagulation disorders"], 0]];
+const quizMedium = [["Linear furanocoumarins (psoralens) show furan-ring fusion at positions:", ["6,7", "7,8", "5,6", "3,4"], 0], ["Angular furanocoumarins (angelicins) show furan-ring fusion at positions:", ["6,7", "7,8", "5,6", "3,4"], 1], ["Compared with angular furanocoumarins, linear furanocoumarins are generally:", ["Less phototoxic", "More phototoxic", "Non-fluorescent", "Non-glycosylated"], 1], ["Coumarin glycosides such as aesculin are more water-soluble than their aglycones because:", ["They lack a lactone ring", "A sugar moiety is attached via a glycosidic bond", "They are synthetic", "They contain nitrogen"], 1], ["Chromone C-glycosides resist hydrolysis better than O-glycosides mainly because of:", ["A weaker sugar unit", "A C–C bond instead of a hydrolyzable C–O bond", "Their larger molecular size", "Their lower polarity"], 1], ["In terms of classification, aloin and aloe-emodin are respectively:", ["Both anthraquinones", "Chromone C-glycoside and its derived anthraquinone form", "Both furanocoumarins", "Both xanthones"], 1], ["A bicoumarin is best defined as:", ["A coumarin fused with a phenyl ring", "Two coumarin units linked together", "A coumarin attached to a sugar", "A coumarin with a furan ring"], 1], ["Which is a natural example of a bicoumarin acting as an anticoagulant?", ["Aesculin", "Dicoumarol", "Khellin", "Mangiferin"], 1], ["Besides warfarin, which synthetic 4-hydroxycoumarin is used as an anticoagulant?", ["Acenocoumarol", "Aesculin", "Umbelliferone", "Bergapten"], 0], ["The enzyme PAL converts phenylalanine into:", ["Coumarin", "Cinnamate", "Caffeate", "Ferulate"], 1], ["The enzyme C4H acts on which substrate in coumarin biosynthesis?", ["Phenylalanine", "Cinnamate", "p-Coumaroyl-CoA", "Feruloyl-CoA"], 1], ["The enzyme 4CL is responsible for:", ["Deamination of phenylalanine", "Activation of p-coumarate to its CoA-thioester", "Ring hydroxylation of cinnamate", "Glycosylation of coumarins"], 1], ["Umbelliferone is derived biosynthetically from:", ["Cinnamate", "p-Coumarate", "Caffeate", "Ferulate"], 1], ["Esculetin arises biosynthetically from:", ["p-Coumarate", "Caffeate", "Ferulate", "Cinnamate"], 1], ["Scopoletin is derived biosynthetically from:", ["Ferulate", "Caffeate", "p-Coumarate", "Cinnamate"], 0], ["Which enzymes catalyze ortho-hydroxylation of p-coumaroyl-CoA toward umbelliferone?", ["AtF6'H1 and Ib1", "RgC2'H and Ib2", "PAL and C4H", "4CL only"], 1], ["Which enzymes catalyze hydroxylation of feruloyl-CoA toward scopoletin?", ["RgC2'H and Ib2", "AtF6'H1 and Ib1/Ib2", "PAL only", "C4H only"], 1], ["Which four compounds are classified as the 'simple coumarins' formed at the end of the core pathway?", ["Coumarin, umbelliferone, esculetin, scopoletin", "Psoralen, bergapten, xanthotoxin, angelicin", "Khellin, visnagin, khellinin, cromolyn", "Aloin, aloesin, cassiaside, mangiferin"], 0], ["4-Hydroxycoumarin and coumestrol are grouped together as:", ["Furanocoumarins", "Coumarins with modification in the pyrone ring", "Bicoumarins", "Chromone C-glycosides"], 1], ["Psoralen and xanthyletin represent which branch of the biosynthetic scheme?", ["Simple coumarins", "Furano/pyranocoumarin formation", "Chromone C-glycosides", "Xanthone formation"], 1], ["Structurally, khellin differs from visnagin by having:", ["An extra hydroxyl group", "A methoxy (OCH3) substituent where visnagin has H", "An extra sugar unit", "A fused benzene ring"], 1], ["Cromolyn sodium was developed as a synthetic analog based on the structure of:", ["Umbelliferone", "Khellin", "Dicoumarol", "Mangiferin"], 1], ["Which pair reflects anti-inflammatory/veno-tonic coumarin activity versus bronchodilator/vasodilator chromone activity?", ["Esculetin/aescin versus khellin/visnagin", "Psoralen versus aloin", "Warfarin versus mangiferin", "Gentisin versus cassiaside"], 0], ["PUVA therapy, combining psoralens with UVA light, is used to treat:", ["Asthma and bronchospasm", "Psoriasis and vitiligo", "Venous insufficiency", "Blood coagulation disorders"], 1], ["In the alkali test, the greenish-blue color of coumarins results from:", ["Formation of a new ring", "Opening of the lactone ring", "Reduction of the carbonyl", "Loss of the benzene ring"], 1], ["Compared with chromones, coumarins under UV light (365 nm) typically fluoresce:", ["Yellow or green versus blue", "Blue versus yellow or green", "Red versus blue", "Colorless versus yellow"], 1], ["Structurally, xanthones differ from chromones in that xanthones are:", ["Bicyclic", "Tricyclic, from chromone fused with a phenyl ring", "Acyclic", "Monocyclic"], 1], ["Mangiferin is termed a 'C-glycosyl xanthone' because:", ["Its sugar links to the aglycone via a carbon-carbon bond", "It contains chlorine", "It has no sugar unit", "It is synthesized industrially"], 0], ["Mangiferin and alpha-mangostin differ in that:", ["Mangiferin is antimicrobial, alpha-mangostin is antidiabetic", "Mangiferin is antioxidant/antidiabetic (mango leaves), alpha-mangostin is antimicrobial/anticancer (mangosteen pericarp)", "Both come from the same plant", "Neither is a xanthone"], 1], ["Hydroxylation, methoxylation, and isoprenylation on the coumarin benzene ring primarily explain:", ["Loss of biological activity", "The structural diversity across coumarin subclasses", "Conversion into chromones", "Loss of the lactone ring"], 1], ["Which pairing correctly matches a simple chromone with a chromone derivative and an activity?", ["Chromone (fluorescent marker) vs. khellin (bronchodilator)", "Aloin vs. mangiferin", "Gentisin vs. cassiaside", "Warfarin vs. aescin"], 0], ["Khellin's historical antispasmodic/bronchodilator use served as a prototype for developing:", ["Anticoagulant drugs", "Asthma bronchodilator therapy", "Antifungal drugs", "Laxative drugs"], 1], ["The biosynthetic-pharmacological link between dicoumarol and warfarin is that:", ["Both are furanocoumarins used in PUVA", "Dicoumarol (natural bicoumarin) inspired warfarin; both inhibit VKORC1", "Warfarin is derived from mangiferin", "Both are chromone C-glycosides"], 1], ["Aloin is classified separately from aloe-emodin because:", ["Aloin is the intact chromone C-glycoside; aloe-emodin is its derived anthraquinone form", "Aloin is a furanocoumarin; aloe-emodin is a xanthone", "They come from unrelated plants", "Aloe-emodin is the glycoside and aloin is the aglycone"], 0], ["The ferric chloride test specifically detects:", ["Any coumarin lactone", "Phenolic (hydroxylated) coumarins", "Chromone C-glycosides", "Furan ring fusion"], 1], ["Which set correctly matches plant source to chromone-type compound class?", ["Aloe: chromone C-glycosides; Citrus: simple chromones + PMCs; Cassia: cassiaside", "Aloe: xanthones; Citrus: bicoumarins; Cassia: furanocoumarins", "Aloe: furanocoumarins; Citrus: anthraquinones; Cassia: pyranocoumarins", "Aloe: PMCs; Citrus: cassiaside; Cassia: xanthones"], 0], ["The key structural difference between furanocoumarins and pyranocoumarins is:", ["The type of sugar attached", "Whether a furan or a pyran ring is fused to the coumarin nucleus", "The position of the carbonyl group", "The plant family of origin"], 1], ["Visnagin and khellin, as pyranocoumarin-type compounds, act pharmacologically as:", ["Anticoagulants", "Vasodilators", "Laxatives", "Photosensitizers"], 1], ["Psoralens achieve their therapeutic PUVA effect by:", ["Direct antimicrobial action", "Photosensitizing the skin in combination with UVA light", "Inhibiting VKORC1", "Acting as mast-cell stabilizers"], 1], ["Esculin (aesculin) is related to esculetin as:", ["Its anthraquinone derivative", "Its glycoside form (esculetin-6-O-glucoside)", "An unrelated compound", "Its oxidized dimer"], 1], ["Coumarin glycosides are considered plant 'storage forms' because:", ["Glycosylation increases water solubility for storage/transport before hydrolysis releases the aglycone", "They are inactive permanently", "They cannot be hydrolyzed", "They lack a lactone ring"], 0], ["Anticoagulant coumarins (like warfarin) are structurally characterized as:", ["Simple coumarins with no substitution", "4-hydroxycoumarins bearing a bulky side chain", "Furanocoumarins", "Xanthone glycosides"], 1], ["Ammi majus links to PUVA therapy because it is the source of:", ["Khellin and visnagin", "Psoralen and xanthotoxin", "Aesculin and aesculetin", "Mangiferin and gentisin"], 1], ["Regarding ring oxygen position, coumarins and chromones:", ["Differ in O1 position but share carbonyl position", "Share the same O1 position but differ in carbonyl position (C2 vs C4)", "Differ in both O1 and carbonyl position", "Share both positions identically"], 1], ["Khellin and visnagin are classified as chromone 'derivatives' (not simple chromones) because they:", ["Lack a benzene ring", "Carry an additional fused furan ring (furochromone) plus substitution", "Are glycosides", "Contain nitrogen"], 1], ["Aescin's clinical use, and its plant source, are respectively:", ["Anticoagulation; Ammi visnaga", "Venous insufficiency treatment; Aesculus hippocastanum", "Bronchodilation; Citrus bergamia", "Laxative effect; Cassia tora"], 1], ["Bicoumarins and coumarin glycosides differ structurally in that:", ["Bicoumarins link two coumarin units, glycosides link a coumarin to a sugar", "Bicoumarins link a coumarin to a sugar, glycosides link two coumarins", "Both link two coumarins", "Both link a coumarin to a sugar"], 0], ["Furanocoumarins are most strongly associated with which pharmacological property?", ["Vasodilation", "Phototoxicity/photosensitization", "Laxative effect", "Antidiabetic effect"], 1], ["Chromone C-glycosides such as aloin act as laxatives mainly via:", ["Rapid hydrolysis in the stomach", "Resistance to hydrolysis and metabolism by colonic bacteria", "Direct absorption in the small intestine", "Conversion to warfarin"], 1], ["The term '1,2-benzopyrone' is used for coumarins because the carbonyl sits:", ["At position 4, across from O1", "At position 2, adjacent to O1", "At position 6", "At position 8"], 1]];
+const quizHard = [["In the biosynthetic scheme, the sequence Phenylalanine(9) → Cinnamate(10) → p-Coumarate(11) → p-Coumaroyl-CoA(14) leads, after ortho-hydroxylation and spontaneous lactonization, to which numbered compound?", ["Coumarin (1)", "Umbelliferone (2)", "Esculetin (3)", "Scopoletin (4)"], 1], ["The sequence Ferulate(13) →4CL→ Feruloyl-CoA(15) →hydroxylation→ compound(19) →spontaneous→ ends at which simple coumarin?", ["Coumarin", "Umbelliferone", "Esculetin", "Scopoletin"], 3], ["Caffeate is numbered as compound (12) in the pathway and leads, via intermediate (18), to:", ["Coumarin", "Umbelliferone", "Esculetin", "Scopoletin"], 2], ["The key structural difference between the route to coumarin (1, via compound 16) and the route to umbelliferone (2, via compound 17) is:", ["Coumarin retains no extra ring-hydroxyl, while umbelliferone gains a 7-OH via ortho-hydroxylation", "Umbelliferone lacks the lactone ring", "Coumarin is glycosylated, umbelliferone is not", "They differ in the enzyme PAL only"], 0], ["4-Hydroxycoumarin (7) and coumestrol (8) are grouped as 'coumarins with modification in the pyrone ring' because:", ["They are glycosides", "They carry structural modification within the pyrone ring itself, not just benzene-ring substitution", "They are furanocoumarins", "They lack a carbonyl group"], 1], ["Psoralen (5) and xanthyletin (6) represent which labeled branch of the biosynthetic diagram?", ["Simple coumarins", "Furano/pyranocoumarins", "Coumarins with pyrone-ring modification", "Chromone C-glycosides"], 1], ["Daphnetin (compound 20) arises as further modification from which branch of the pathway?", ["The coumarin (1) branch", "The esculetin-related branch", "The scopoletin branch only", "The xanthone branch"], 1], ["Coumestrol differs from 4-hydroxycoumarin in that coumestrol additionally has:", ["A fused benzofuran-type ring system", "A furan ring at 6,7-positions", "A pyran ring only", "A glycoside sugar unit"], 0], ["RgC2'H (from Ruta graveolens) and Ib2 (from Ipomoea batatas) catalyze which specific step?", ["Deamination of phenylalanine", "Ortho-hydroxylation of p-coumaroyl-CoA", "Activation of ferulate to feruloyl-CoA", "Glycosylation of esculetin"], 1], ["AtF6'H1 (Arabidopsis) and Ib1/Ib2 (I. batatas) both catalyze hydroxylation of which substrate?", ["p-Coumaroyl-CoA", "Feruloyl-CoA", "Cinnamate", "Phenylalanine"], 1], ["Spontaneous lactonization of the hydroxylated CoA-thioester intermediates occurs because:", ["An enzyme forces ring closure", "Cis-isomerization allows the ortho-OH to cyclize onto the carbonyl without further enzymatic help", "The CoA ester is unstable and degrades randomly", "UV light permanently destroys the ester bond"], 1], ["The single positional shift of the carbonyl from C2 (coumarins) to C4 (chromones) changes the pharmacophore from:", ["An ortho-fused lactone/ester system to a cross-conjugated ketone system", "A ketone to an ester", "An aromatic ring to an aliphatic chain", "A glycoside to an aglycone"], 0], ["Linear (6,7-fused) furanocoumarins show stronger phototoxicity than angular (7,8-fused) isomers mainly because:", ["Linear fusion gives a planar structure enabling DNA intercalation and UVA photoadduct formation", "Angular fusion increases water solubility", "Linear fusion adds a sugar unit", "Angular fusion removes the lactone ring"], 0], ["Warfarin's mechanism is best explained as:", ["A structural mimic of dicoumarol that inhibits VKORC1, blocking vitamin K regeneration for clotting factor synthesis", "A direct thrombin inhibitor unrelated to coumarins", "A cyclooxygenase inhibitor derived from khellin", "A xanthone that inhibits platelet aggregation"], 0], ["Aloin resists hydrolysis and produces a delayed laxative effect because:", ["Its C–C glycosidic bond resists glycosidases/acid, requiring colonic bacterial metabolism for activation", "It is absorbed intact in the stomach", "It converts immediately to warfarin", "It lacks any glycosidic bond"], 0], ["Cromolyn sodium exemplifies drug design from a natural lead because it:", ["Was derived by structurally modifying khellin to retain chromone-based mast-cell stabilization with improved tolerability", "Is chemically identical to dicoumarol", "Was synthesized from mangiferin", "Has no relationship to any natural coumarin or chromone"], 0], ["Xanthones are termed 'biogenetically related' to chromones rather than unrelated because:", ["They form by fusing a chromone nucleus with an extra phenyl ring, sharing the same γ-pyrone core", "They contain no oxygen atoms", "They are synthesized only industrially", "They lack any pyrone ring"], 0], ["Coumestrol's extra benzofuran-type ring fusion distinguishes it structurally from simpler pyrone-ring-modified coumarins like:", ["Psoralen", "4-Hydroxycoumarin", "Dicoumarol", "Aesculin"], 1], ["Aescin is pharmacologically distinct from esculin/esculetin (despite the same plant source) because aescin is:", ["A triterpenoid saponin, not a coumarin", "A furanocoumarin", "A chromone C-glycoside", "A xanthone"], 0], ["Khellin differs from visnagin by a single substituent — specifically:", ["Khellin has R = OCH3 where visnagin has R = H, on the furochromone nucleus", "Khellin has an extra sugar unit", "Visnagin has an extra benzene ring", "Khellin lacks the furan ring present in visnagin"], 0], ["Comparing RgC2'H and AtF6'H1, both catalyze ortho-hydroxylation, but act on different substrates, namely:", ["p-Coumaroyl-CoA versus feruloyl-CoA respectively", "Cinnamate versus caffeate respectively", "Phenylalanine versus tyrosine respectively", "Coumarin versus chromone respectively"], 0], ["The alkali test's greenish-blue color reflects opening of the coumarin lactone; this test does not apply the same way to chromones because chromones:", ["Have a C4 ketone rather than a C2 lactone", "Have no benzene ring", "Are always colorless", "Contain nitrogen"], 0], ["In the pathway diagram, compound (16) leads directly to coumarin (1) while compound (17), formed by further ortho-hydroxylation, leads to:", ["Esculetin", "Umbelliferone", "Scopoletin", "Daphnetin"], 1], ["PUVA therapy requires both a furanocoumarin and UVA light because:", ["The furanocoumarin must intercalate DNA and then be photoactivated by UVA to form pyrimidine photoadducts", "UVA alone is sufficient without the furanocoumarin", "The furanocoumarin is inactive unless first hydrolyzed by stomach acid", "UVA destroys the furanocoumarin's toxicity"], 0], ["Aloin, aloesin, and cassiaside are all chromone-type glycosides, but they diverge pharmacologically because:", ["Aloin/aloesin (Aloe) drive laxative/skin-lightening effects, while cassiaside (Cassia tora) drives hepatoprotective/antioxidant effects", "All three have identical pharmacological effects", "Cassiaside is not a glycoside at all", "Aloin is a xanthone, unlike the other two"], 0], ["Mangiferin's relative metabolic stability is attributed mainly to:", ["Its C-glycosidic linkage resisting hydrolysis", "Its lack of any sugar unit", "Its furanocoumarin structure", "Its bicoumarin dimer structure"], 0], ["The four coumarin identification tests collectively distinguish simple from phenolic coumarins because:", ["All coumarins give blue UV fluorescence and a positive alkali test, but only phenolic coumarins give a green FeCl3 color and enhanced ammonia-vapor fluorescence", "Only phenolic coumarins fluoresce under UV at all", "The alkali test only works on phenolic coumarins", "FeCl3 detects the lactone ring, not phenolic groups"], 0], ["The Bontrager reaction is more relevant to aloin than to khellin because:", ["Aloin's chemistry involves anthrone/anthraquinone-related structures detected by this reaction; khellin's furochromone skeleton lacks this chromophore", "Khellin is not extractable with alkali", "Aloin is not a glycoside", "The Bontrager reaction is specific to furanocoumarins"], 0], ["Is the shikimic acid pathway alone sufficient to fully account for xanthone formation?", ["Yes, entirely sufficient", "No — an additional biogenetic step (fusion with a second phenyl ring) is required beyond the basic phenylpropanoid route", "No — xanthones instead arise entirely from the mevalonate pathway", "Yes, because xanthones are simple coumarin glycosides"], 1], ["Scopoletin may show weaker ferric chloride reactivity than esculetin because:", ["Scopoletin has one free hydroxyl and one methoxylated position, reducing reactive free -OH groups compared with esculetin's two free hydroxyls", "Scopoletin has no ring oxygen", "Esculetin is not phenolic", "FeCl3 does not react with any coumarin"], 0], ["Horse-chestnut extracts may combine aescin with esculin/esculetin-type coumarins because:", ["Aescin provides veno-tonic/anti-edema saponin action while the coumarins add complementary anti-inflammatory/antioxidant effects", "Esculin converts directly into aescin in the body", "Aescin is itself a coumarin glycoside", "The two compounds are chemically identical"], 0], ["Psoralen-type furanocoumarins are called 'linear' and angelicin-type are called 'angular' based on:", ["The geometry of furan-ring fusion (6,7-collinear vs 7,8-angled) relative to the coumarin's long axis", "Their molecular weight", "Their plant of origin only", "Their color under visible light"], 0], ["The chromone parent nucleus can give rise to both simple derivatives (noreugenin) and complex furochromones (khellin, visnagin) because:", ["The core γ-pyrone skeleton allows either substitution (hydroxylation/methylation) or additional furan-ring fusion while retaining the base nucleus", "Simple chromones and furochromones share no common structural core", "Furochromones are unrelated compounds not derived from chromone", "Noreugenin is itself a furochromone"], 0], ["Aesculin exemplifies a 'storage-to-active-form' strategy because:", ["Its O-glycosidic bond is hydrolyzed upon tissue damage, releasing active esculetin from the more soluble storage form", "It cannot be hydrolyzed under any condition", "It is directly bioactive without hydrolysis", "It converts to warfarin upon hydrolysis"], 0], ["Aloin's and aesculin's hydrolysis kinetics differ sharply mainly because:", ["Aesculin's O-glycosidic bond is readily cleaved by glycosidases/acid, while aloin's C-glycosidic bond resists this, requiring colonic bacterial metabolism", "Both are hydrolyzed at identical rates", "Aloin has no glycosidic bond at all", "Aesculin is never hydrolyzed in the body"], 0], ["Ring-fusion type (furan vs. pyran), rather than the coumarin core alone, determines pharmacological class because:", ["Furan-fused psoralens intercalate DNA and photoreact under UVA, while pyran-fused compounds relax vascular/bronchial smooth muscle", "Both ring types produce identical pharmacological effects", "The coumarin core alone fully determines activity regardless of fused ring", "Pyran fusion always produces anticoagulants"], 0], ["Ammi visnaga and Ammi majus, both in genus Ammi, yield different compound classes (furochromones vs. furanocoumarins) because:", ["Species-specific differences in the enzymes governing the α- versus γ-benzopyrone branch point direct metabolism differently despite the shared genus", "They use entirely unrelated biosynthetic pathways", "Only Ammi visnaga uses the shikimic acid pathway", "Ammi majus does not produce any secondary metabolites"], 0], ["Within the coumarin/chromone family covered in this lecture, glycosylation type (O- versus C-linked) most directly determines:", ["Susceptibility to hydrolysis and hence the speed/route of biological activation (rapid aglycone release vs. delayed bacterial metabolism)", "The color of UV fluorescence", "The enzyme used in the shikimate pathway", "Whether the compound is aromatic"], 0], ["Synthesizing the full lecture, the shikimic acid pathway diverges into anticoagulant, photosensitizing, vasodilator, bronchodilator, laxative, and antioxidant activities primarily through branch points involving:", ["Carbonyl position, ring hydroxylation/fusion pattern, oxidative dimerization, and glycosylation type", "A single unbranched linear pathway with no divergence", "Random post-translational modification unrelated to structure", "Differences in plant geographic origin alone"], 0], ["Engineering khellin into cromolyn sodium and dicoumarol into warfarin both illustrate:", ["Natural lead-compound optimization to yield improved synthetic pharmaceutical agents", "Random unrelated drug discovery with no natural template", "Direct extraction without any chemical modification", "Failed attempts that were never adopted clinically"], 0]];
+
+const quizLevels = { easy: quizEasy, medium: quizMedium, hard: quizHard };
+let quizLevel = 'easy';
+let quizData = quizLevels[quizLevel];
+
+let quizOrder = quizData.map((_,i)=>i);
+for(let i=quizOrder.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [quizOrder[i],quizOrder[j]]=[quizOrder[j],quizOrder[i]]; }
+let quizPos = 0;
+let quizScore = 0;
+let answered = false;
+const quizArea = document.getElementById('quizArea');
+const quizPosLabel = document.getElementById('quizPos');
+const quizScoreLabel = document.getElementById('quizScore');
+const quizBarFill = document.getElementById('quizBarFill');
+
+function shuffleOptions(opts, correctIdx){
+  const arr = opts.map((text,i)=>({text, correct:i===correctIdx}));
+  for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr;
+}
+
+function renderQuiz(){
+  if(quizPos >= quizOrder.length){
+    quizArea.innerHTML = '<div class="q-card quiz-done"><div class="big">'+quizScore+' / '+quizOrder.length+'</div><p>Quiz complete.</p><button class="btn primary" id="quizRestart">Restart</button></div>';
+    document.getElementById('quizRestart').addEventListener('click',()=>{
+      quizOrder = quizData.map((_,i)=>i);
+      for(let i=quizOrder.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [quizOrder[i],quizOrder[j]]=[quizOrder[j],quizOrder[i]]; }
+      quizPos=0; quizScore=0; renderQuiz();
+    });
+    quizPosLabel.textContent = 'Finished';
+    quizBarFill.style.width='100%';
+    return;
+  }
+  answered = false;
+  const [q, opts, correctIdx] = quizData[quizOrder[quizPos]];
+  const shuffled = shuffleOptions(opts, correctIdx);
+  quizPosLabel.textContent = 'Question ' + (quizPos+1) + ' / ' + quizOrder.length;
+  quizScoreLabel.textContent = 'Score: ' + quizScore;
+  quizBarFill.style.width = ((quizPos)/quizOrder.length*100) + '%';
+
+  const card = document.createElement('div');
+  card.className='q-card';
+  const h3 = document.createElement('h3');
+  h3.textContent = q;
+  card.appendChild(h3);
+
+  shuffled.forEach(opt=>{
+    const b = document.createElement('button');
+    b.className='opt';
+    b.textContent = opt.text;
+    b.addEventListener('click',()=>{
+      if(answered) return;
+      answered = true;
+      document.querySelectorAll('.opt').forEach(o=>o.setAttribute('disabled','true'));
+      if(opt.correct){ b.classList.add('correct'); quizScore++; }
+      else{
+        b.classList.add('wrong');
+        document.querySelectorAll('.opt').forEach(o=>{ if(o.textContent===opts[correctIdx]) o.classList.add('correct'); });
+      }
+      quizScoreLabel.textContent = 'Score: ' + quizScore;
+    });
+    card.appendChild(b);
+  });
+
+  const actions = document.createElement('div');
+  actions.className='q-actions';
+  const scoreSpan = document.createElement('span');
+  scoreSpan.className='quiz-score';
+  scoreSpan.textContent = 'Tap an option to answer';
+  const nextBtn = document.createElement('button');
+  nextBtn.className='btn primary';
+  nextBtn.textContent = quizPos===quizOrder.length-1 ? 'Finish' : 'Next question →';
+  nextBtn.addEventListener('click',()=>{ quizPos++; quizArea.innerHTML=''; renderQuiz(); });
+  actions.appendChild(scoreSpan);
+  actions.appendChild(nextBtn);
+  card.appendChild(actions);
+
+  quizArea.innerHTML='';
+  quizArea.appendChild(card);
+}
+document.querySelectorAll('#quizLevelChips .level-chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('#quizLevelChips .level-chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    quizLevel = chip.dataset.level;
+    quizData = quizLevels[quizLevel];
+    quizOrder = quizData.map((_,i)=>i);
+    for(let i=quizOrder.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [quizOrder[i],quizOrder[j]]=[quizOrder[j],quizOrder[i]]; }
+    quizPos = 0; quizScore = 0;
+    renderQuiz();
+  });
+});
+renderQuiz();
+</script>
+</body>
+</html>
